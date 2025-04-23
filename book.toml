@@ -1,0 +1,16 @@
+[book]
+authors = ["Jayson Lennon"]
+language = "en"
+multilingual = false
+src = "src"
+title = "Programming with Actors"
+
+[preprocessor]
+
+[preprocessor.mermaid]
+command = "mdbook-mermaid"
+
+[output]
+
+[output.html]
+additional-js = ["mermaid.min.js", "mermaid-init.js"]
