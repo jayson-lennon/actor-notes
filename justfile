@@ -5,3 +5,8 @@ deploy:
   # git config user.name "Deploy from CI"
   # git config user.email ""
   cd gh-pages && git add -A && git commit -m 'deploy new book' && git push origin +gh-pages
+  just clean
+  # git worktree remove gh-pages --force
+
+clean:
+  git worktree remove gh-pages --force
