@@ -2,6 +2,12 @@
 
 [Introduction](README.md)
 
+---
+
+- [Quick DDD Primer](ddd.md)
+
+---
+
 - [Actor Systems](actor_systems.md)
   - [What is an Actor System?](actor_systems/what_is_an_actor_system.md)
   - [Why Choose an Actor Model?](actor_systems/why_choose_actor_model.md)
