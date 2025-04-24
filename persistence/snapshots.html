@@ -1,0 +1,244 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Snapshots - Programming with Actors</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Programming with Actors</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="snapshots"><a class="header" href="#snapshots">Snapshots</a></h1>
+<p>While the Journal provides a complete, immutable history of an actor's state changes through its events, reconstructing the actor's current state requires replaying potentially thousands or millions of events from the beginning of time or from the last saved snapshot. For long-lived actors with extensive journals, this replay process can become prohibitively slow, delaying recovery and impacting availability.</p>
+<p><strong>Snapshots</strong> provide a shortcut. A Snapshot is a serialized representation of an actor's state at <em>a specific point in time</em>. It's a capture of the state after applying a sequence of events up to a certain journal sequence number.</p>
+<h2 id="snapshots-and-journals-together"><a class="header" href="#snapshots-and-journals-together">Snapshots and Journals Together</a></h2>
+<p>Snapshots are not a replacement for the Journal; they are a complementary mechanism.</p>
+<ul>
+<li>The <strong>Journal</strong> remains the single source of truth, holding the complete, ordered sequence of events. It tells the story of <em>how</em> the actor reached a state.</li>
+<li>A <strong>Snapshot</strong> is a saved version of the <em>result</em> of applying events up to a certain point. It's a pre-computed state from the story.</li>
+</ul>
+<p>When an actor recovers, instead of replaying <em>all</em> events from the beginning of its journal, it can load the most recent Snapshot and then only replay the events that occurred <em>after</em> that snapshot was taken.</p>
+<h2 id="the-recovery-process-with-snapshots"><a class="header" href="#the-recovery-process-with-snapshots">The Recovery Process with Snapshots</a></h2>
+<p>The recovery workflow when using Snapshots is:</p>
+<ol>
+<li><strong>Load Latest Snapshot:</strong> The actor system attempts to load the most recent Snapshot saved for this specific actor instance.</li>
+<li><strong>Load Journal from Snapshot Point:</strong> If a Snapshot is successfully loaded (including its associated journal sequence number), the system then reads events from the Journal starting <em>immediately after</em> that sequence number.</li>
+<li><strong>Apply Remaining Events:</strong> The actor applies only these subsequent journaled events to the state loaded from the Snapshot.</li>
+<li><strong>Resume Processing:</strong> Once the remaining events are applied, the actor is fully recovered and can handle new messages.</li>
+<li><strong>Without Snapshot:</strong> If no Snapshot is found (e.g., it's the first time recovering, or snapshots were lost), the actor recovers by replaying all events from the very beginning of its Journal.</li>
+</ol>
+<p>This process significantly reduces the number of events that need to be replayed, speeding up recovery time.</p>
+<h2 id="when-and-what-to-snapshot"><a class="header" href="#when-and-what-to-snapshot">When and What to Snapshot</a></h2>
+<ul>
+<li><strong>Frequency:</strong> Snapshots are typically saved periodically – for example, after every N events, after a certain period of time, or when the actor's state reaches a certain size or complexity. Too frequent snapshotting adds overhead (serialization, storage), while too infrequent snapshotting reduces the recovery speed benefit.</li>
+<li><strong>What State:</strong> The snapshot should capture the actor's <em>current state</em>. It should include all the mutable fields that define the actor's current condition. This state must be <strong>Serializable</strong> so it can be written to persistent storage.</li>
+<li><strong>Consistency:</strong> The snapshot must accurately reflect the state after processing events up to a specific, recorded journal sequence number. This sequence number is crucial for knowing where to start replaying events from the Journal.</li>
+</ul>
+<h2 id="considerations"><a class="header" href="#considerations">Considerations</a></h2>
+<ul>
+<li><strong>Storage:</strong> Snapshots require persistent storage (databases, file systems). This storage must be reliable and accessible during recovery.</li>
+<li><strong>Serialization Overhead:</strong> Creating a snapshot involves serializing the actor's entire state, which can be CPU-intensive and time-consuming, especially for large states.</li>
+<li><strong>Coupling:</strong> The snapshot format is tightly coupled to the actor's internal state structure. Changes to the actor's state model might require versioning or migration strategies for existing snapshots.</li>
+<li><strong>Snapshot vs. Journal Integrity:</strong> The Journal remains the ultimate source of truth. If a snapshot is corrupt or missing, the system can (albeit slower) recover solely from the Journal. The system should prioritize Journal integrity.</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../persistence/journal.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../persistence/actor_recovery.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../persistence/journal.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../persistence/actor_recovery.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../mermaid.min.js"></script>
+        <script src="../mermaid-init.js"></script>
+
+
+    </div>
+    </body>
+</html>

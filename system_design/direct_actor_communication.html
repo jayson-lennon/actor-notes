@@ -1,0 +1,244 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Direct Actor Communication - Programming with Actors</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Programming with Actors</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="direct-actor-communication"><a class="header" href="#direct-actor-communication">Direct Actor Communication</a></h1>
+<p>Direct actor communication relies on one actor holding a reference (<code>ActorRef</code>) to a specific instance of another actor. Messages are sent directly from the sender actor's <code>ActorRef</code> to the receiver actor's <code>ActorRef</code>. This approach is straightforward and provides a clear path for point-to-point interactions.</p>
+<p>However, a significant challenge arises when the target actor instance terminates. Because the <code>ActorRef</code> points to a specific instance, if that instance dies (due to an exception, planned shutdown, or other reason), the <code>ActorRef</code> becomes a "dead letter" reference. Any subsequent messages sent to this dead <code>ActorRef</code> will typically be routed to a system-defined dead letter mailbox, never reaching the intended recipient. The communication channel between the two specific instances is effectively broken.</p>
+<h2 id="handling-channel-failure"><a class="header" href="#handling-channel-failure">Handling Channel Failure</a></h2>
+<p>Strategies for dealing with this broken channel include:</p>
+<ol>
+<li>
+<p><strong>Death Watch</strong></p>
+<p>The sending actor can "watch" the receiving actor. When the receiving actor terminates, the sender receives a <code>Terminated</code> message. This signals the sender that the <code>ActorRef</code> is now stale and should no longer be used. The "watch" capability can be achieved by linking actors together in a supervision tree in order to be notified when the actor dies.</p>
+</li>
+<li>
+<p><strong>Message Delivery Failure</strong></p>
+<p>While not guaranteed in all actor systems, some systems might provide feedback (e.g., via acknowledgements or specific error messages) if a message cannot be delivered to a live instance. This would result in an error when attempting to send a message to the dead actor.</p>
+</li>
+<li>
+<p><strong>Protocol-Level Acknowledgements</strong></p>
+<p>Design the communication protocol such that the receiver explicitly acknowledges processing messages. If an acknowledgement isn't received within a timeout, the sender can infer failure, potentially due to a dead receiver.</p>
+</li>
+</ol>
+<h2 id="design-considerations"><a class="header" href="#design-considerations">Design Considerations</a></h2>
+<p>Given that a direct <code>ActorRef</code> connection to a specific instance can fail, architectural designs using this pattern should account for potential disruptions. Here are some strategies that can be used to manage recovery.</p>
+<h3 id="finding-a-replacement"><a class="header" href="#finding-a-replacement">Finding a Replacement</a></h3>
+<p>If the target actor was part of a supervised hierarchy and is restarted, the sender needs a <em>new</em> <code>ActorRef</code> for the replacement instance. This often requires a mechanism outside the direct reference, such as:</p>
+<ul>
+<li>Querying a parent supervisor or registry for the new <code>ActorRef</code>.</li>
+<li>Using a naming service where actors register themselves by a logical ID.</li>
+</ul>
+<p>In both of these scenarios, there <em>will</em> be a time delay between the time the dead actor is restarted and the propagation of it's new <code>ActorRef</code> to a registry or naming service. This facilitates the need for the sending actor to use exponential backoff on retries because it may receive the same (dead) <code>ActorRef</code> from a registry while the dead actor restarts.</p>
+<h3 id="idempotency"><a class="header" href="#idempotency">Idempotency</a></h3>
+<p>While not directly addressing <code>ActorRef</code>, it's still important to design messages and receiver logic to be <a href="https://en.wikipedia.org/wiki/Idempotence">idempotent</a> where possible. This allows the sender to safely retry sending a message (potentially to a newly acquired <code>ActorRef</code> for a replacement actor) without causing unintended side effects if the original message was partially processed before the crash.</p>
+<h3 id="fault-tolerance-boundaries"><a class="header" href="#fault-tolerance-boundaries">Fault Tolerance Boundaries</a></h3>
+<p>Clearly define which parts of the system rely on direct actor communication and implement robust error handling and recovery strategies at those boundaries.</p>
+<p>Put flaky connections and unstable crash-prone actors behind a "router" actor. Communication can then be reliably made to the router actor, which then relays the message to the unstable ones. The router actor can include the retry and queuing mechanisms which will allow senders to send messages without worrying about error handling.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../system_design/supervision.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../system_design/pub_sub_communication.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../system_design/supervision.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../system_design/pub_sub_communication.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../mermaid.min.js"></script>
+        <script src="../mermaid-init.js"></script>
+
+
+    </div>
+    </body>
+</html>

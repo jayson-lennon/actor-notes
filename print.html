@@ -1,0 +1,1155 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Programming with Actors</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Programming with Actors</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
+<p>A collection of notes on programming using actors.</p>
+<p>Source code for this book (and program files) are available at <a href="https://github.com/jayson-lennon/actor-notes">https://github.com/jayson-lennon/actor-notes</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="quick-ddd-primer"><a class="header" href="#quick-ddd-primer">Quick DDD Primer</a></h1>
+<p>Here is a list of DDD tactical terms and how they map to Actor Systems:</p>
+<ul>
+<li>
+<p><strong>Entity</strong> -&gt; <strong>Unit of State with Unique Identity</strong>: A distinct "thing" in your system that you track individually over time.</p>
+<ul>
+<li><strong>Actor Mapping:</strong> Often represented by the state <em>within</em> an Actor, with the Actor's address or ID representing the Entity's unique identity.</li>
+</ul>
+</li>
+<li>
+<p><strong>Value Object</strong> -&gt; <strong>Immutable Data Structure</strong>: Data that describes something but has no own identity; defined only by its values.</p>
+<ul>
+<li><strong>Actor Mapping:</strong> Data carried as the content of Actor Messages or stored as immutable fields within an Actor's state.</li>
+</ul>
+</li>
+<li>
+<p><strong>Aggregate</strong> -&gt; <strong>Consistent State Cluster (managed by a Coordinator)</strong>: A group of related data that <em>must</em> be kept valid together. One point controls all changes to this group.</p>
+<ul>
+<li><strong>Actor Mapping:</strong> Naturally maps to a stateful Actor. The Actor <em>is</em> the coordinator, encapsulating and managing the state cluster, processing messages sequentially to ensure internal consistency.</li>
+</ul>
+</li>
+<li>
+<p><strong>Domain Service</strong> -&gt; <strong>Domain Process/Operation</strong>: Logic for a significant action or calculation that doesn't belong to just one "thing."</p>
+<ul>
+<li><strong>Actor Mapping:</strong> Implemented by dedicated Actors responsible for specific domain processes or orchestrations, possibly interacting with stateful Actors.</li>
+</ul>
+</li>
+<li>
+<p><strong>Application Service</strong> -&gt; <strong>Use Case Coordinator</strong>: Code that directs steps to perform a specific action requested by the user or another system; uses the domain logic but isn't the logic itself.</p>
+<ul>
+<li><strong>Actor Mapping:</strong> Implemented by Actors that serve as the entry point for commands or requests, orchestrating interactions by sending messages to other Actors (Domain Services, Aggregates).</li>
+</ul>
+</li>
+<li>
+<p><strong>Repository</strong> -&gt; <strong>State Loader/Saver</strong>: Gets and saves the "Consistent State Clusters" (Aggregates) from/to storage.</p>
+<ul>
+<li><strong>Actor Mapping:</strong> Used <em>by</em> Actors to manage their persistent state. In some frameworks, persistence is integrated into the Actor model itself.</li>
+</ul>
+</li>
+<li>
+<p><strong>Domain Event</strong> -&gt; <strong>Something Significant Happened</strong>: A notification or record that a key occurrence took place in the system.</p>
+<ul>
+<li><strong>Actor Mapping:</strong> Often implemented directly as Actor Messages that are emitted by Actors and can be subscribed to by other Actors or external systems.</li>
+</ul>
+</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="actor-systems"><a class="header" href="#actor-systems">Actor Systems</a></h1>
+<p>Let's think of an "actor system" not just as a technology, but as a <em>model</em> for structuring software. It’s a paradigm shift away from traditional imperative or sequential programming, offering a fundamentally different way to design and build applications – one that excels in handling concurrency, complexity, and resilience.</p>
+<p>Instead of viewing your application as a series of steps executed linearly, an actor system envisions it as a collection of independent, self-contained entities interacting through messages. Think of it like many small independent programs communicating with each other. Its primary benefits include:</p>
+<ul>
+<li><strong>Improved Extensibility</strong>: Each actor can be developed, tested, and scaled independently, making it easier to integrate new features without affecting existing ones.</li>
+<li><strong>Enhanced Maintainability</strong>: The clear separation of concerns and the straightforward message-passing interfaces within an actor system make the codebase easier to understand and maintain.</li>
+<li><strong>Enhanced simplicity</strong>: Each actor operates as an independent unit, allowing you to focus solely on the messages it sends and receives, thereby simplifying the coding process.</li>
+<li>And of course <strong>easier concurrent programming</strong>: By breaking down applications into manageable, isolated components, actor systems simplify the implementation and management of concurrent operations.</li>
+</ul>
+<p>By embracing this model, you can build more robust and adaptable software systems that are better equipped to handle complex operations and future growth.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="what-is-an-actor-system"><a class="header" href="#what-is-an-actor-system">What is an Actor System?</a></h1>
+<p>At its core, an actor system consists of:</p>
+<ul>
+<li><strong>Actors:</strong> These are the fundamental building blocks. Think of them as lightweight, isolated computational units. Each actor has:
+<ul>
+<li><strong>State:</strong>  Private data that only it can directly access and modify. This eliminates a huge source of concurrency problems (more on this later).</li>
+<li><strong>Behavior:</strong> A set of rules defining how it reacts to incoming messages. It's essentially the logic for processing those messages, potentially updating its state and sending new messages to other actors.</li>
+<li><strong>Mailbox:</strong>  A queue where incoming messages are stored. Actors process these messages one at a time (serially), ensuring order within their own context.</li>
+</ul>
+</li>
+<li><strong>Messages:</strong> The only way actors communicate with each other. They're simple data structures – no shared memory, no direct function calls. This is <em>crucial</em>.</li>
+<li><strong>The System:</strong>  The environment that manages the actors, schedules them for execution, and handles message routing.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="why-choose-an-actor-model"><a class="header" href="#why-choose-an-actor-model">Why Choose an Actor Model?</a></h1>
+<p>Traditional imperative programming often struggles with concurrency. You end up wrestling with locks, mutexes, semaphores – tools designed to <em>prevent</em> problems arising from shared mutable state.  These tools are complex, error-prone (deadlocks!), and can significantly hinder performance due to contention. The actor model sidesteps this entire problem class.</p>
+<p>Here's how the actor model shines compared to sequential or even traditional concurrent programming.</p>
+<h2 id="elimination-of-shared-mutable-state"><a class="header" href="#elimination-of-shared-mutable-state">Elimination of Shared Mutable State</a></h2>
+<p>This is <em>the</em> key benefit. Because actors have private state and communicate only through messages, you completely avoid race conditions and deadlocks that plague shared-memory concurrency.  This dramatically simplifies reasoning about your code – you can understand the behavior of a single actor in isolation.</p>
+<h2 id="natural-concurrency"><a class="header" href="#natural-concurrency">Natural Concurrency</a></h2>
+<p>Many tasks we think of as sequential are actually inherently concurrent. Consider:</p>
+<ul>
+<li>
+<p><strong>CLI tooling</strong></p>
+<p>Command-line interfaces (CLIs) typically operate on files. You can enhance even basic tools by modeling each file as an actor, thus incorporating concurrency seamlessly.</p>
+</li>
+<li>
+<p><strong>Image Processing Pipeline</strong></p>
+<p>Different stages (loading, filtering, compression) can be represented as actors, each working independently on a portion of the image data.</p>
+</li>
+<li>
+<p><strong>Game Logic</strong></p>
+<p>AI agents, physics simulations, rendering – all could be handled by separate actors, allowing for parallel execution and responsiveness.</p>
+</li>
+<li>
+<p><strong>Web Server Handling Requests</strong></p>
+<p>Each request could be handled by an independent actor, allowing for parallel processing without complex threading management.</p>
+</li>
+<li>
+<p><strong>Financial Trading System</strong></p>
+<p>Order processing, risk management, market data analysis - each can be an actor reacting to events in real-time.</p>
+</li>
+<li>
+<p><strong>Resilience &amp; Fault Tolerance</strong></p>
+<p>Actors are designed to fail gracefully. If one actor crashes, it doesn't bring down the entire system.  Supervision strategies (built into many actor systems) allow parent actors to monitor their children and restart them if they fail, ensuring continued operation. This is incredibly difficult to achieve reliably in traditional architectures.</p>
+</li>
+<li>
+<p><strong>Modularity &amp; Scalability</strong></p>
+<p>Actors promote modularity – each actor encapsulates a specific responsibility. This makes code easier to understand, test, and maintain.  The inherent message-passing nature also lends itself well to scaling; actors can be distributed across multiple machines with relative ease.</p>
+</li>
+<li>
+<p><strong>Reactive Programming</strong></p>
+<p>Actor systems embody reactive programming by inherently responding asynchronously to events without the need for polling.</p>
+</li>
+</ul>
+<p>The actor model also enables some interesting techniques that are difficult to pull off in more traditional programming paradigms. Some of them are highlighted in the next section.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="key-advantages-of-actors"><a class="header" href="#key-advantages-of-actors">Key Advantages of Actors</a></h1>
+<p>The actor model enables patterns that are incredibly challenging or impractical in other paradigms, providing key advantages over traditional programming paradigms:</p>
+<ul>
+<li>
+<p><strong>Complex State Machines</strong></p>
+<p>Managing intricate state transitions becomes much cleaner when each state is represented by an actor, reacting to messages representing events. Imagine a complex workflow engine – each step could be an actor, simplifying the logic and making it easier to debug.</p>
+</li>
+<li>
+<p><strong>Decentralized Coordination</strong></p>
+<p>In systems where you don't want a central authority dictating behavior (e.g., distributed sensor networks), actors can coordinate their actions through message passing without relying on a single point of failure or bottleneck.</p>
+</li>
+<li>
+<p><strong>Adaptive Systems</strong></p>
+<p>Actors can dynamically adjust their behavior based on incoming messages and the state of other actors, creating systems that learn and adapt over time.  Think of an autonomous vehicle – each component (perception, planning, control) could be an actor reacting to sensor data and coordinating with others.</p>
+</li>
+<li>
+<p><strong>Workflows</strong></p>
+<p>Actor systems excel at managing long-running workflows with by allowing actors to suspend their work temporarily and resume later, maintaining state and ensuring seamless execution over extended periods (even days).</p>
+</li>
+<li>
+<p><strong>Event Journals</strong></p>
+<p>Actors can log actions and message exchanges to event journals, providing a comprehensive audit trail of system activities. This allows you to see exactly what the state of an actor was at any given moment in time.</p>
+</li>
+</ul>
+<p>The actor model shines when it comes to maintainability and architectural flexibility. The core principle – building systems from independent, message-passing actors – directly contributes to a more manageable and adaptable codebase.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="system-maintainability"><a class="header" href="#system-maintainability">System Maintainability</a></h1>
+<p>In traditional architectures, adding new features often involves modifying existing codebases, potentially introducing regressions or unintended side effects. With the actor model, this process is significantly cleaner.  New functionality frequently translates into <em>adding new actors</em>.</p>
+<p>Think of it like building with Lego bricks instead of sculpting a single block of clay. Want to add a new feature? Create an actor that encapsulates that feature's logic and connect it to existing actors via messages. This has several key benefits:</p>
+<ul>
+<li><strong>Isolation:</strong> The new functionality is isolated within its own actor, minimizing the risk of impacting other parts of the system.  No need to fear widespread code changes or complex refactoring.</li>
+<li><strong>Clear Boundaries:</strong> Actors clearly define boundaries of responsibility. Adding a feature means defining what that actor <em>does</em>, and how it interacts with others – leading to better-defined interfaces and reduced coupling.</li>
+<li><strong>Testability:</strong> Individual actors are much easier to test in isolation, as you can focus solely on their behavior without needing to mock or simulate complex interactions.</li>
+</ul>
+<p><strong>Example:</strong> Imagine a shopping cart system. Initially, you have actors for <code>Cart</code>, <code>ProductCatalog</code>, and <code>PaymentProcessor</code>. Now, you want to add a "Recommendation Engine." Instead of modifying the existing actors, you create a new <code>RecommendationEngine</code> actor that receives messages about items in the cart and sends back recommendations. This keeps the core logic clean and focused. The shopping cart and related functionality still run just as before (including their performance characteristics), but now there is new functionality that can provide recommendations.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="actors-in-actor-systems"><a class="header" href="#actors-in-actor-systems">Actors in Actor Systems</a></h1>
+<p><strong>Actors</strong> are the primary components of actor systems, acting as isolated, lightweight computational units designed to handle messaging and state management without direct interference.</p>
+<h2 id="key-components-of-an-actor"><a class="header" href="#key-components-of-an-actor">Key Components of an Actor</a></h2>
+<ul>
+<li><strong>State:</strong>
+Each actor maintains its own private data that only it can access and modify. This isolation prevents concurrent modifications and eliminates common concurrency issues.</li>
+<li><strong>Behavior:</strong>
+Actors define behavior as a set of rules for processing incoming messages. This behavior includes updating the actor's state and sending messages to other actors.</li>
+<li><strong>Mailbox:</strong>
+Actors have a mailbox, which is a queue where all incoming messages are stored. The actor processes these messages one at a time, ensuring that message processing adheres to a specific order.</li>
+</ul>
+<h2 id="benefits"><a class="header" href="#benefits">Benefits</a></h2>
+<ul>
+<li><strong>Isolation:</strong> Actors do not share state directly, preventing concurrency conflicts.</li>
+<li><strong>Concurrency Simplification:</strong> Serial processing of messages within each actor avoids synchronization issues.</li>
+<li><strong>Modularity:</strong> Actors are independent units that can be tested and scaled separately.</li>
+</ul>
+<h2 id="actor-processing"><a class="header" href="#actor-processing">Actor Processing</a></h2>
+<p>Below is a high-level overview of the steps taken by an actor:</p>
+<ol>
+<li>
+<p><strong>Receive message via mailbox</strong></p>
+<p>Message receipt is asynchronous. The actor system will typically get the next message from the queue and hand it off to the actor for processing. The actor never enters a loop to get messages and instead has a handler that is called when a message is sent to it for processing.</p>
+</li>
+<li>
+<p><strong>Update its internal state</strong></p>
+<p>Upon receiving a message, an actor <em>may</em> modify its internal state based on the content and purpose of the message. This state update enables actors to maintain and alter their internal configurations or variables as required by their behavior logic.</p>
+</li>
+<li>
+<p><strong>Send messages to other actors (including itself)</strong></p>
+<p>An actor has the capability to send messages to other actors within the same system. This includes having the ability to send messages to itself, which can be useful for tasks that require iterative processing or callbacks.</p>
+</li>
+<li>
+<p><strong>Spawn new child actors</strong></p>
+<p>In addition to sending and receiving messages, an actor can also create new child actors. This feature supports hierarchical structures in actor systems, enabling parent-child relationships where actors manage their own lifecycle and interactions with other members of the system.</p>
+</li>
+<li>
+<p><strong>End message processing</strong></p>
+<p>After any state updates and message sends, the actor returns from it's handler function thereby handing off control back to the actor system.</p>
+</li>
+</ol>
+<p>All functionality of a program can be modeled by putting small state changes in actors and using messages to communicate. Note how in the above steps there are no accesses to other actor states and no waiting for messages from other actors. All an actor does is run a handler function upon message receipt, perform it's processing, and then stop.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="message-passing"><a class="header" href="#message-passing">Message Passing</a></h1>
+<p>While message passing is fundamentally different from direct function calls, it's helpful to understand the conceptual similarity. In imperative programming, you have a function that takes arguments, performs some operation, and returns a value.  In an actor system:</p>
+<ul>
+<li><strong>The Actor:</strong> Represents the "function" – encapsulating logic and state.</li>
+<li><strong>The Message:</strong> Acts as both the argument <em>and</em> the trigger for execution. It tells the actor what to do.</li>
+<li><strong>The Response (Optional):</strong> The actor's actions, potentially including sending new messages to other actors, can be considered a form of "response" – communicating results or initiating further processing.</li>
+</ul>
+<p>However, the crucial difference is that message passing is <em>asynchronous</em> and <em>never</em> blocks.  The sender doesn’t wait for a direct return value; it continues its own work while the actor processes the message. This decoupling is key to concurrency and resilience. Actors control the flow of information by deciding which messages to process, when to send new messages, and how to update their internal state based on those messages. They act as gatekeepers, ensuring that data flows through the system in a controlled and predictable manner.</p>
+<p>The actor's message handler should handle incoming messages promptly without getting stuck in blocking operations. If extensive computations or delays are inevitable, these tasks should be executed asynchronously using background threads or tasks managed by the actor.</p>
+<p>Keeping the message handling function fast in order to process messages immediately (or near-immediate) allows for control messages to be processed by the actor while it's working. This enables interesting capabilities, such as:</p>
+<ul>
+<li>
+<p><strong>Self-monitoring</strong></p>
+<p>Actors can schedule periodic messages to themselves to perform self-monitoring checks like offloading work to other actors if their queue becomes too large.</p>
+</li>
+<li>
+<p><strong>Temporary Suspension</strong></p>
+<p>An outside source can order an actor to suspend operation, but maintain their message queue. For example, maybe a quota was hit and we need to stop processing, but we still want to resume work later after the quota is reset or increased.</p>
+</li>
+<li>
+<p><strong>Message Rejection</strong></p>
+<p>Perhaps some messages are no longer relevant, so the actor can be told to drop their pending jobs.</p>
+</li>
+<li>
+<p><strong>Graceful Shutdown</strong></p>
+<p>Shutdown messages can be sent to the actor which order it to stop. The actor can then perform various cleanup operations before quitting. This may include:</p>
+<ul>
+<li>dropping remaining messages</li>
+<li>finishing remaining messages</li>
+<li>creating a snapshot so work can be resumed later</li>
+</ul>
+</li>
+</ul>
+<p>This design allows actors to be highly responsive and flexible in handling various scenarios.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="mailboxes"><a class="header" href="#mailboxes">Mailboxes</a></h1>
+<p>An actor mailbox, or message queue, serves as a central storage unit specifically designed to hold messages directed at a particular actor instance in concurrent programming systems. This mechanism ensures that actors can receive and process their messages in a controlled and orderly manner without immediate interference from other operations or actors.</p>
+<h2 id="purpose-of-a-mailbox"><a class="header" href="#purpose-of-a-mailbox">Purpose of a Mailbox</a></h2>
+<ol>
+<li>
+<p><strong>Message Buffering:</strong> Actors typically operate asynchronously, and it's possible for multiple messages to be sent to an actor at once before it has the opportunity to process them. The mailbox acts as a buffer, storing these messages until they can be processed one by one.</p>
+</li>
+<li>
+<p><strong>Isolation from Concurrency Issues:</strong> By handling message delivery and processing in a serialized manner through the mailbox, actors are isolated from direct concurrency issues such as data races or deadlocks.</p>
+</li>
+<li>
+<p><strong>Order of Message Processing:</strong> Mailboxes typically use <strong>First-In-First-Out (FIFO)</strong> ordering which processes messages in the order they were received.</p>
+</li>
+</ol>
+<h2 id="implementation-characteristics"><a class="header" href="#implementation-characteristics">Implementation Characteristics</a></h2>
+<ul>
+<li>
+<p><strong>Thread Safety:</strong> Mailboxes are inherently thread-safe to allow multiple threads to deliver messages concurrently without corrupting the message queue.</p>
+</li>
+<li>
+<p><strong>Blocking Operations:</strong> Upon attempting to read from an empty mailbox, actor systems often implement blocking operations where the actor thread is paused until a new message arrives. Conversely, when attempting to write to a full mailbox, write operations may block or drop messages based on system policies.</p>
+</li>
+<li>
+<p><strong>Capacity Management:</strong> Mailboxes can have limited capacity, which influences how they handle overflow situations. This capacity management prevents excessive memory usage and helps manage system resources effectively.</p>
+</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="communication-channels"><a class="header" href="#communication-channels">Communication channels</a></h1>
+<p>The method in which actors communicate with other actors is not dictated by the underlying mathematical model of actors. Therefore, <strong>how</strong> they communicate can vary significantly across different implementations.</p>
+<h2 id="types-of-actor-communication-channels"><a class="header" href="#types-of-actor-communication-channels">Types of Actor Communication Channels</a></h2>
+<p>Each method of communication has different overhead and informs the way in which actor-based programs are written. Here is a short list of the primary methods used by actor frameworks or libraries:</p>
+<h3 id="physical-actors-actors-with-affinity"><a class="header" href="#physical-actors-actors-with-affinity">Physical Actors (Actors with Affinity)</a></h3>
+<p>Some actor systems use "physical" or affinity-based communication channels where actors have direct bindings or shared memory spaces:</p>
+<ul>
+<li><strong>Shared Memory:</strong> Actors residing on the same physical machine can communicate directly using shared memory, which provides low-latency interaction.</li>
+<li><strong>Network Sockets:</strong> Network sockets are used for inter-machine communication. This introduces a minimal overhead compared to higher-level messaging protocols.</li>
+</ul>
+<p>With physical actors you will usually have access to an <code>ActorRef</code> or similar data structure. This represents a reference to a specific instance of an actor in the system (local or remote). If the actor dies, then the <code>ActorRef</code> becomes invalid and the communication channel is broken. Attempting to send a message on a broken channel will result in a failure at the sender. This gives the sender the opportunity to perform some kind of different action on failure, but then also requires managing the lifetime of the communication channel manually.</p>
+<p>Many actor libraries use physical actors because they are the simple to implement while also providing the bare-minimum to fulfill the actor model without additional overhead.</p>
+<h3 id="virtual-actors-grains"><a class="header" href="#virtual-actors-grains">Virtual Actors (Grains)</a></h3>
+<p>This approach is used by Microsoft Orleans, a framework that leverages a distributed computing model. In this paradigm, actors, or "grains," are essentially virtualized and opaque objects to the caller. If actor <code>A</code> wishes to communicate with actor <code>B</code>, it simply sends a message to <code>B</code>. The Orleans runtime handles the intricacies of managing these grains. Specifically:</p>
+<ul>
+<li><strong>Automatic Activation:</strong> If actor <code>B</code> is not already operational when actor <code>A</code> attempts to send a message, the runtime automatically activates or "spins up" actor <code>B</code>.</li>
+<li><strong>Transparent Location:</strong> Actor <code>B</code> can be located anywhere within the distributed system. The exact location becomes irrelevant since Orleans manages the communication channels between actors.</li>
+<li><strong>Message Queueing and Routing:</strong> Messages are placed in a queue specific to the grain (actor) until it is ready to process them. This mechanism ensures that message delivery is reliable and follows a FIFO order where applicable.</li>
+</ul>
+<p>With virtual actor systems, you'll have access to a <code>VirtualActorRef</code> or similar data structure. This represents the "identity" of an actor. For example, if you query for actor <code>Foo</code> with identity <code>123</code>, then the returned <code>VirtualActorRef</code> will <em>always</em> route to <code>Foo123</code> even if that actor dies. The communication channel to <code>Foo123</code> <em>always exists</em> because the actor runtime performs work behind the scenes to create and maintain the communication channel regardless of the current system state.</p>
+<h3 id="event-driven-channels"><a class="header" href="#event-driven-channels">Event-Driven Channels</a></h3>
+<p>Event-driven channels involve actors listening to specific events or signals:</p>
+<ul>
+<li><strong>Subscription Model:</strong> Actors can subscribe to certain types of events or messages. When these events occur, the event source sends out notifications that are delivered to interested actors.</li>
+<li><strong>Asynchronous Notification:</strong> This model is inherently asynchronous, meaning that actors do not have to actively query for events but instead reactively process them.</li>
+</ul>
+<p>Event-driven channels can use a global message broker. Actors subscribe to events on the broker and also send messages to the broker. The message broker then becomes responsible for routing messages to the correct subscribers.</p>
+<p>Using a global message broker decouples actors from direct <code>ActorRef</code> communication, eliminating concerns about broken links. However, this setup introduces indirection, potentially increasing overhead in message transmission. Additionally, there's a risk of message loss unless acknowledged by the recipient. We assume continuous availability of the broker, ensuring that messages can always be <em>sent</em>; however, delivery is not guaranteed without waiting for an acknowledgment.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="system-design"><a class="header" href="#system-design">System Design</a></h1>
+<p>It takes some up-front effort to design an actor system, but it has several benefits:</p>
+<ul>
+<li>
+<p><strong>Near 1:1 translation of design to implementation</strong></p>
+<p>In actor systems, each component (actor) is independent and communicates with other components via message passing. This parallels a common architectural approach where design documents outline discrete responsibilities and interactions between system components.</p>
+</li>
+<li>
+<p><strong>Clarity and Traceability</strong></p>
+<p>Because actors are isolated units, the flow of communication (messages) between them can be easily mapped back to the design documents (or vice-versa). This clear separation makes it simpler to understand how different parts of the system work together, improving traceability and accountability.</p>
+</li>
+<li>
+<p><strong>Ease of Debugging</strong></p>
+<p>With well-defined communication channels, debugging becomes more straightforward. You can trace message flows through actors, making it easier to pinpoint where issues occur.</p>
+</li>
+<li>
+<p><strong>Flexibility for Change</strong></p>
+<p>Design documents that closely mirror code allow for more flexible changes. If requirements evolve, modifying the design document first provides a clear path for updating the implementation without introducing bugs.</p>
+</li>
+</ul>
+<p>For these reasons, it's recommended that design documents be used for <em>all</em> actor-based projects regardless of size.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="supervision"><a class="header" href="#supervision">Supervision</a></h1>
+<p>Actor supervision is a key concept when using the actor model.</p>
+<h2 id="what-is-actor-supervision"><a class="header" href="#what-is-actor-supervision">What is Actor Supervision?</a></h2>
+<p>In an actor system, implementing hierarchical supervision is a best practice. When an actor acts as a parent by spawning another actor (the child), the parent should take on the role of supervisor for the spawned child. The rationale behind this is that the parent has the knowledge of how to spawn the child. Therefore, in cases where the child terminates, the parent is equipped to respawn it.</p>
+<p>The supervision hierarchy forms a tree structure where each supervisor is responsible for spawning its immediate children. This setup allows the entire system to be "bootstrapped" by starting with the root-level actor, known as the <em>system supervisor</em>. The system supervisor spawns its children, which can also be supervisors, and these in turn spawn their own children, continuing until the entire system is online. Since supervisors manage only their immediate children, this design facilitates restarting arbitrary parts of the system as needed.</p>
+<p>Supervision strategies include:</p>
+<ul>
+<li>
+<p><strong>Resume</strong></p>
+<p>The failing child actor is resumed, and its internal state is preserved. This is suitable for transient errors that do not corrupt the actor's state and where continuing processing is safe.</p>
+</li>
+<li>
+<p><strong>Restart</strong></p>
+<p>The failing child actor is stopped, a new instance of the actor is created with a fresh internal state, and the new instance resumes processing. This is typically used when the actor's state might be corrupted by the failure and a clean slate is needed. The message that caused the failure is usually skipped.</p>
+</li>
+<li>
+<p><strong>Stop</strong></p>
+<p>The failing child actor is permanently terminated. This directive is used for non-recoverable errors or when the failed actor is no longer needed.</p>
+</li>
+<li>
+<p><strong>Escalate</strong></p>
+<p>The failure is sent up to the supervisor's own supervisor (its parent). This is used when the current supervisor cannot handle the specific failure and delegates the decision to a higher level in the hierarchy.</p>
+</li>
+</ul>
+<p>A supervision strategy is activated by a <em>supervision event</em>. When a problem occurs with a child actor, the actor system itself will generate a supervision event and forward it to the child's supervisor. The supervisor can then apply it's desired strategy based on it's own state and the state of the child actor.</p>
+<h3 id="benefits-of-actor-supervision"><a class="header" href="#benefits-of-actor-supervision">Benefits of Actor Supervision</a></h3>
+<ol>
+<li>
+<p><strong>Failure Isolation</strong>: By isolating failures at the actor level, supervision ensures that an error in one part of the application does not affect the rest.</p>
+</li>
+<li>
+<p><strong>Fault Tolerance</strong>: Applications can be designed to handle failures gracefully, providing a high availability of services even when parts of the system fail.</p>
+</li>
+<li>
+<p><strong>Ease of Debugging and Maintenance</strong>: Clearly defined recovery strategies make debugging easier and maintenance simpler.</p>
+</li>
+</ol>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="direct-actor-communication"><a class="header" href="#direct-actor-communication">Direct Actor Communication</a></h1>
+<p>Direct actor communication relies on one actor holding a reference (<code>ActorRef</code>) to a specific instance of another actor. Messages are sent directly from the sender actor's <code>ActorRef</code> to the receiver actor's <code>ActorRef</code>. This approach is straightforward and provides a clear path for point-to-point interactions.</p>
+<p>However, a significant challenge arises when the target actor instance terminates. Because the <code>ActorRef</code> points to a specific instance, if that instance dies (due to an exception, planned shutdown, or other reason), the <code>ActorRef</code> becomes a "dead letter" reference. Any subsequent messages sent to this dead <code>ActorRef</code> will typically be routed to a system-defined dead letter mailbox, never reaching the intended recipient. The communication channel between the two specific instances is effectively broken.</p>
+<h2 id="handling-channel-failure"><a class="header" href="#handling-channel-failure">Handling Channel Failure</a></h2>
+<p>Strategies for dealing with this broken channel include:</p>
+<ol>
+<li>
+<p><strong>Death Watch</strong></p>
+<p>The sending actor can "watch" the receiving actor. When the receiving actor terminates, the sender receives a <code>Terminated</code> message. This signals the sender that the <code>ActorRef</code> is now stale and should no longer be used. The "watch" capability can be achieved by linking actors together in a supervision tree in order to be notified when the actor dies.</p>
+</li>
+<li>
+<p><strong>Message Delivery Failure</strong></p>
+<p>While not guaranteed in all actor systems, some systems might provide feedback (e.g., via acknowledgements or specific error messages) if a message cannot be delivered to a live instance. This would result in an error when attempting to send a message to the dead actor.</p>
+</li>
+<li>
+<p><strong>Protocol-Level Acknowledgements</strong></p>
+<p>Design the communication protocol such that the receiver explicitly acknowledges processing messages. If an acknowledgement isn't received within a timeout, the sender can infer failure, potentially due to a dead receiver.</p>
+</li>
+</ol>
+<h2 id="design-considerations"><a class="header" href="#design-considerations">Design Considerations</a></h2>
+<p>Given that a direct <code>ActorRef</code> connection to a specific instance can fail, architectural designs using this pattern should account for potential disruptions. Here are some strategies that can be used to manage recovery.</p>
+<h3 id="finding-a-replacement"><a class="header" href="#finding-a-replacement">Finding a Replacement</a></h3>
+<p>If the target actor was part of a supervised hierarchy and is restarted, the sender needs a <em>new</em> <code>ActorRef</code> for the replacement instance. This often requires a mechanism outside the direct reference, such as:</p>
+<ul>
+<li>Querying a parent supervisor or registry for the new <code>ActorRef</code>.</li>
+<li>Using a naming service where actors register themselves by a logical ID.</li>
+</ul>
+<p>In both of these scenarios, there <em>will</em> be a time delay between the time the dead actor is restarted and the propagation of it's new <code>ActorRef</code> to a registry or naming service. This facilitates the need for the sending actor to use exponential backoff on retries because it may receive the same (dead) <code>ActorRef</code> from a registry while the dead actor restarts.</p>
+<h3 id="idempotency"><a class="header" href="#idempotency">Idempotency</a></h3>
+<p>While not directly addressing <code>ActorRef</code>, it's still important to design messages and receiver logic to be <a href="https://en.wikipedia.org/wiki/Idempotence">idempotent</a> where possible. This allows the sender to safely retry sending a message (potentially to a newly acquired <code>ActorRef</code> for a replacement actor) without causing unintended side effects if the original message was partially processed before the crash.</p>
+<h3 id="fault-tolerance-boundaries"><a class="header" href="#fault-tolerance-boundaries">Fault Tolerance Boundaries</a></h3>
+<p>Clearly define which parts of the system rely on direct actor communication and implement robust error handling and recovery strategies at those boundaries.</p>
+<p>Put flaky connections and unstable crash-prone actors behind a "router" actor. Communication can then be reliably made to the router actor, which then relays the message to the unstable ones. The router actor can include the retry and queuing mechanisms which will allow senders to send messages without worrying about error handling.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="pubsub-communication"><a class="header" href="#pubsub-communication">Pub/Sub Communication</a></h1>
+<p>Publish/Subscribe (Pub/Sub) is a messaging pattern where senders (publishers) do not send messages directly to specific receivers (subscribers). Instead, publishers categorize messages into topics or channels without knowing which subscribers, if any, will receive them. Subscribers express interest in one or more topics and receive all messages published to the topics they are subscribed to.</p>
+<p>In an actor system context, actors can act as publishers, subscribers, or both. An actor publishes a message to a specific topic managed by a dedicated Pub/Sub service or mediator actor within or external to the system. Other actors subscribe to this topic via the same service.</p>
+<h3 id="pubsub-and-event-driven-design"><a class="header" href="#pubsub-and-event-driven-design">Pub/Sub and Event-Driven Design</a></h3>
+<p>This pattern aligns closely with <strong>event-driven design</strong>. Publishers emit "events" (messages) describing something that has happened (e.g., <code>UserCreated</code>, <code>OrderPlaced</code>, <code>ItemUpdated</code>). Subscribers, acting upon these events, react to changes in the system state without needing to know the source of the event. This creates a loosely coupled system where components interact primarily by reacting to a stream of events.</p>
+<h3 id="trade-offs-overhead-vs-management"><a class="header" href="#trade-offs-overhead-vs-management">Trade-offs: Overhead vs. Management</a></h3>
+<p>A key characteristic of Pub/Sub is that all messages for a given topic <em>must</em> pass through the Pub/Sub service or mediator. This introduces a layer of indirection and potential overhead. The service needs to receive the message, determine which subscribers are interested, and relay the message to each of them. This adds latency compared to a direct actor-to-actor message send, and consumes resources in the Pub/Sub infrastructure itself.</p>
+<p>However, this overhead comes with significant benefits, primarily in alleviating the management of direct communication channels. With Pub/Sub:</p>
+<ul>
+<li>Publishers do not need <code>ActorRef</code>s for specific subscribers. They only need to know the Pub/Sub service and the topic.</li>
+<li>The system becomes more resilient to the failure of individual subscriber instances. If a subscriber actor dies, the publisher is unaffected, and other subscribers continue to receive messages. The responsibility of ensuring a subscriber receives messages (potentially after a restart) often shifts to the Pub/Sub infrastructure or the subscriber's supervisor/registration mechanism.</li>
+<li>Subscribers can join or leave topics dynamically without affecting publishers or other subscribers.</li>
+<li>Adding new functionality to the system becomes trivial: Create a new actor, subscribe to a specific topic, and it's now integrated</li>
+</ul>
+<p>Compared to direct <code>ActorRef</code> communication where managing dead letters and finding replacement actor instances is a concern for the sender, Pub/Sub shifts the complexity. The challenge moves from managing many point-to-point connections to ensuring the reliability and scalability of the central Pub/Sub service and how actors register/deregister their subscriptions.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="hybrid-communication"><a class="header" href="#hybrid-communication">Hybrid Communication</a></h1>
+<p>A common and effective strategy in larger actor systems, especially those adhering to Domain-Driven Design principles, is to employ a hybrid communication model. This approach uses Publish/Subscribe for communication <em>between</em> distinct Bounded Contexts, and direct <code>ActorRef</code> messaging for communication <em>within</em> a Bounded Context.</p>
+<p>A <a href="https://martinfowler.com/bliki/BoundedContext.html"><strong>Bounded Context</strong></a> can be thought of as a logical boundary encompassing a set of related actors, data, and business logic that operates around a specific part of the domain (e.g., Order Management, Inventory, Shipping).</p>
+<h3 id="inter-context-communication-via-pubsub"><a class="header" href="#inter-context-communication-via-pubsub">Inter-Context Communication via Pub/Sub</a></h3>
+<p>When functionality in one bounded context needs to interact with or be notified of events in another context, Pub/Sub is utilized. For example:</p>
+<ul>
+<li>An <code>Order Management</code> context publishes an <code>OrderPlaced</code> event to a topic.</li>
+<li>An <code>Inventory</code> context subscribes to the <code>OrderPlaced</code> topic to decrement stock levels.</li>
+<li>A <code>Shipping</code> context also subscribes to the <code>OrderPlaced</code> topic to initiate the shipping process.</li>
+</ul>
+<p><strong>Rationale:</strong> Pub/Sub provides loose coupling between contexts. The <code>Order Management</code> context doesn't need to know <em>who</em> is interested in an <code>OrderPlaced</code> event, only that it happened. This allows contexts to evolve independently. New contexts can subscribe to existing events without modifying the publisher. It abstracts away the location and specific instances of actors in other contexts. Failures in one subscriber context do not directly impact the publisher or other subscribers.</p>
+<h3 id="intra-context-communication-via-direct-actorref"><a class="header" href="#intra-context-communication-via-direct-actorref">Intra-Context Communication via Direct ActorRef</a></h3>
+<p>Within a single bounded context, actors often have close relationships and need to interact directly and efficiently. For example:</p>
+<ul>
+<li>Within the <code>Order Management</code> context, an <code>OrderAggregate</code> actor might communicate directly with <code>OrderItem</code> actors or a <code>PaymentProcessor</code> actor <em>within the same context</em>.</li>
+</ul>
+<p><strong>Rationale:</strong> Direct <code>ActorRef</code> communication within a context is typically faster and more performant than routing through a Pub/Sub layer. Actors within the same context are often managed together (e.g., by the same supervisor), and their interactions are tightly coupled by the context's specific business logic. The overhead and indirection of Pub/Sub are unnecessary and counterproductive for these direct, focused interactions. While direct <code>ActorRef</code>s require managing references and handling potential instance failures, this complexity is contained <em>within</em> the boundary of the context. The context's internal supervision and management strategies can handle failures of its internal actors.</p>
+<h3 id="benefits-of-the-hybrid-approach"><a class="header" href="#benefits-of-the-hybrid-approach">Benefits of the Hybrid Approach</a></h3>
+<p>This hybrid model leverages the strengths of both patterns:</p>
+<ul>
+<li><strong>Loose Coupling Between Contexts:</strong> Facilitates independent development, deployment, and scaling of different parts of the system. Changes within one context are less likely to break others, provided the published event contracts remain stable.</li>
+<li><strong>Efficient Interaction Within Contexts:</strong> Enables high-performance, direct communication for tightly related actors and operations within a specific domain area.</li>
+<li><strong>Containment of Complexity:</strong> The complexity of managing direct <code>ActorRef</code> lifecycles and failures is contained within the context boundary, while the complexity of managing subscriptions and message relay is centralized in the Pub/Sub layer.</li>
+<li><strong>Clear Boundaries:</strong> Reinforces the separation defined by the bounded contexts, making the system architecture easier to understand and maintain.</li>
+</ul>
+<h3 id="implementation-concerns"><a class="header" href="#implementation-concerns">Implementation Concerns</a></h3>
+<p>Note that actors <em>within</em> the context <em>do not</em> communicate with any actors outside their context. All messages outside the context must be routed through a gateway actor which acts as the only entry and exit point for messages into and out of the context. This gateway actor also plays a role as an <a href="https://deviq.com/domain-driven-design/anti-corruption-layer">anti-corruption layer</a>, translating messages at the context boundary. This allows the context to evolve over time without having an impact on the rest of the system.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="request-response"><a class="header" href="#request-response">Request-Response</a></h1>
+<h2 id="direct-to-target"><a class="header" href="#direct-to-target">Direct-to-target</a></h2>
+<p>Here are the steps for implementing a direct-to-target request/response pattern using a Pub/Sub message broker. This involves creating unique custom subscriptions per actor so that the responder knows where to publish their response.</p>
+<ol>
+<li>
+<p><strong>Responding Actor Subscribes</strong></p>
+<p>The actor designed to respond (the "responder") subscribes to the Pub/Sub broker for a specific query topic, e.g., <code>topic/query/my_thing</code>. This tells the broker to forward all messages published to this topic to the responder actor.</p>
+</li>
+<li>
+<p><strong>Requesting Actor Prepares and Subscribes</strong></p>
+<p>The actor initiating the request (the "requester") generates a unique reply topic (e.g., based on its own ID and the request ID) and then subscribes to this unique topic with the broker. This ensures the requester will receive messages specifically addressed back to it.</p>
+</li>
+<li>
+<p><strong>Requesting Actor Publishes Request</strong></p>
+<p>The requester actor publishes the request message to the responder's query topic (<code>topic/query/my_thing</code>). The message payload includes the necessary query data and the unique reply topic generated in step 2 (often in a field like <code>reply_to</code>).</p>
+</li>
+<li>
+<p><strong>Broker Routes Request</strong></p>
+<p>The Pub/Sub broker receives the message published to <code>topic/query/my_thing</code>. Based on the subscription from step 1, the broker routes this message to the responding actor.</p>
+</li>
+<li>
+<p><strong>Responding Actor Processes and Publishes Response</strong></p>
+<p>The responder actor receives the request message, processes it, generates a response, and extracts the <code>reply_to</code> topic from the incoming message. It then publishes the response message to this extracted <code>reply_to</code> topic. The responder does not need to know the identity or <code>ActorRef</code> of the requester.</p>
+</li>
+<li>
+<p><strong>Broker Routes Response</strong></p>
+<p>The Pub/Sub broker receives the message published to the unique <code>reply_to</code> topic. Based on the subscription from step 2, the broker routes this response message to the requesting actor.</p>
+</li>
+<li>
+<p><strong>Requesting Actor Receives Response</strong></p>
+<p>The requester actor receives the response message on its unique reply topic.</p>
+</li>
+</ol>
+<p>This pattern effectively decouples the requesting and responding actors, as they only need to know about the Pub/Sub broker and agreed-upon topics, not each other's specific addresses.</p>
+<pre class="mermaid">sequenceDiagram
+    participant Requester as Requesting Actor
+    participant Broker as Pub/Sub Broker
+    participant Responder as Responding Actor
+
+    Note over Requester,Responder: Setup Phase
+    Responder-&gt;&gt;Broker: Subscribe(&quot;topic/query/my_thing&quot;) (when actor spawns)
+    Requester-&gt;&gt;Broker: Subscribe(&quot;unique/reply/topic&quot;)
+
+    Note over Requester,Responder: Request/Response Phase
+    activate Requester
+    Requester-&gt;&gt;Broker: Publish(&quot;topic/query/my_thing&quot;, reply_to=&quot;unique/reply/topic&quot;)
+    activate Broker
+    Broker--&gt;&gt;Responder: Message(&quot;topic/query/my_thing&quot;, reply_to=&quot;unique/reply/topic&quot;)
+    deactivate Broker
+
+    activate Responder
+    Responder-&gt;&gt;Broker: Publish(&quot;unique/reply/topic&quot;, response_data)
+    deactivate Responder
+    activate Broker
+    Broker--&gt;&gt;Requester: Message(&quot;unique/reply/topic&quot;, response_data)
+    deactivate Broker
+    deactivate Requester
+</pre>
+<h2 id="gateway-correlation-id-mapping"><a class="header" href="#gateway-correlation-id-mapping">Gateway Correlation ID Mapping</a></h2>
+<p>The direct request/response pattern using unique, per-request <code>reply_to</code> topics requires each requesting actor to manage its own temporary subscription. This can become cumbersome, especially if the requesting actors are short-lived or if there are a very large number of concurrent requests. An alternative approach leverages a central <strong>Gateway Actor</strong> to manage the response routing using Correlation IDs.</p>
+<p>In this pattern:</p>
+<ol>
+<li>
+<p><strong>Gateway Subscription</strong></p>
+<p>A dedicated <strong>Gateway Actor</strong> maintains a single, long-lived subscription to a fixed <code>reply_to</code> topic (e.g., <code>gateway/replies</code>). This is the <em>only</em> topic     responses are sent to via the broker.</p>
+</li>
+<li>
+<p><strong>Responder Subscription</strong></p>
+<p>Responding actors subscribe to their specific query topics with the broker, same as before (e.g., <code>topic/query/my_thing</code>).</p>
+</li>
+<li>
+<p><strong>Request from Internal Actor</strong></p>
+<p>A requesting actor (behind the Gateway) sends a request message <em>directly</em> to the Gateway Actor, including the intended query topic and payload.</p>
+</li>
+<li>
+<p><strong>Gateway Action - Publish with Correlation ID</strong></p>
+<p>The Gateway Actor receives the internal request. It generates a unique <strong>Correlation ID</strong> (or reads the one the actor generated) for this request and stores a mapping internally, linking this Correlation ID to the specific requesting actor's <code>ActorRef</code>. The Gateway then publishes the request message to the broker using the intended query topic (<code>topic/query/my_thing</code>). The crucial difference is that the <code>reply_to</code> field in the published message is set to the     <em>Gateway's</em> own fixed reply topic (<code>gateway/replies</code>), and the message payload includes the generated Correlation ID.</p>
+<ul>
+<li><em>Gateway Map:</em> <code>CorrelationID -&gt; RequestingActorRef</code></li>
+<li><em>Published Message:</em> Publish to <code>topic/query/my_thing</code> with payload including query data and <code>correlation_id</code>, <code>reply_to: gateway/replies</code>.</li>
+</ul>
+</li>
+<li>
+<p><strong>Broker Routes Request</strong></p>
+<p>The Pub/Sub broker routes the request message to the subscribing responding actor(s) based on the query topic.</p>
+</li>
+<li>
+<p><strong>Responding Actor Action - Publish Response</strong></p>
+<p>The responding actor receives the request. It processes it and prepares a response. It takes the <code>correlation_id</code> from the incoming message and includes it in the response payload. It then publishes the response message to the topic specified in the <code>reply_to</code> field of the incoming message, which is the     Gateway's fixed reply topic (<code>gateway/replies</code>).</p>
+</li>
+</ol>
+<ul>
+<li><em>Published Message:</em> Publish to <code>gateway/replies</code> with payload including response data and the <em>same</em> <code>correlation_id</code>.</li>
+</ul>
+<ol start="7">
+<li>
+<p><strong>Broker Routes Response</strong></p>
+<p>The Pub/Sub broker routes the response message to the Gateway Actor because the Gateway is subscribed to <code>gateway/replies</code>.</p>
+</li>
+<li>
+<p><strong>Gateway Action - Route to Requester</strong></p>
+<p>The Gateway Actor receives the response message. It extracts the <code>correlation_id</code> from the payload. Using its internal mapping, it looks up the <code>ActorRef</code> of the original requesting actor associated with that Correlation ID. It then sends the response message directly to the requesting actor's <code>ActorRef</code>. After routing, the Gateway may remove the mapping entry for this Correlation ID (depending on whether duplicate responses are possible).</p>
+<ul>
+<li><em>Action:</em> Receive message on <code>gateway/replies</code>. Extract <code>correlation_id</code>. Look up <code>RequestingActorRef</code> in internal map. Send response message directly to <code>RequestingActorRef</code>.</li>
+</ul>
+</li>
+</ol>
+<pre class="mermaid">sequenceDiagram
+    participant ReqInternal as Requesting Actor (Internal)
+    participant Gateway as Gateway Actor
+    participant Broker as Pub/Sub Broker
+    participant Responder as Responding Actor (External)
+
+    Note over ReqInternal,Responder: Setup Phase
+    Gateway-&gt;&gt;Broker: Subscribe(&quot;gateway/replies&quot;)
+    Responder-&gt;&gt;Broker: Subscribe(&quot;topic/query/my_thing&quot;)
+
+    Note over ReqInternal,Responder: Request/Response Phase
+    activate ReqInternal
+    ReqInternal-&gt;&gt;Gateway: Request(query_data)
+    deactivate ReqInternal
+
+    activate Gateway
+    Gateway-&gt;&gt;Gateway: Generate/Store Mapping (CorrID -&gt; ReqInternal)
+    Gateway-&gt;&gt;Broker: Publish(&quot;topic/query/my_thing&quot;, correlation_id, reply_to=&quot;gateway/replies&quot;)
+    deactivate Gateway
+
+    activate Broker
+    Broker--&gt;&gt;Responder: Message(&quot;topic/query/my_thing&quot;, correlation_id, reply_to=&quot;gateway/replies&quot;)
+    deactivate Broker
+
+    activate Responder
+    Responder-&gt;&gt;Broker: Publish(&quot;gateway/replies&quot;, correlation_id, response_data)
+    deactivate Responder
+
+    activate Broker
+    Broker--&gt;&gt;Gateway: Message(&quot;gateway/replies&quot;, correlation_id, response_data)
+    deactivate Broker
+
+    activate Gateway
+    Gateway-&gt;&gt;Gateway: Lookup Mapping (CorrID -&gt; ReqInternal)
+    Gateway-&gt;&gt;ReqInternal: Response(response_data)
+    deactivate Gateway
+</pre>
+<h3 id="benefits-1"><a class="header" href="#benefits-1">Benefits</a></h3>
+<ul>
+<li><strong>Simplifies Requesting Actors:</strong> Requesting actors no longer need to manage individual subscriptions or unique reply topics. They simply send their request to the well-known Gateway.</li>
+<li><strong>Better for Short-Lived Actors:</strong> This pattern is ideal when requesting actors are transient, as the long-lived Gateway handles the durable subscription needed to receive the response.</li>
+<li><strong>Centralized Management:</strong> The complexity of correlating requests and responses is centralized in the Gateway.</li>
+</ul>
+<h3 id="considerations"><a class="header" href="#considerations">Considerations</a></h3>
+<ul>
+<li><strong>State Management in Gateway:</strong> The Gateway must reliably store and manage the Correlation ID to <code>ActorRef</code> mapping. This requires careful consideration of potential Gateway restarts, memory usage for long-running transactions, and handling potential timeouts or orphaned mappings if a requesting actor dies before receiving a response.</li>
+<li><strong>Single Point of Failure:</strong> If the Gateway actor fails, all in-flight requests awaiting responses will be lost unless the Gateway's state is persisted and recoverable.</li>
+</ul>
+<p>This pattern is particularly useful when you have a boundary (like a Bounded Context boundary managed by the Gateway/Router actor) and many internal actors that need to initiate requests to external services or actors via a Pub/Sub bus without exposing their individual presence or managing complex per-request subscriptions.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="messaging-concepts"><a class="header" href="#messaging-concepts">Messaging Concepts</a></h1>
+<p>Beyond the fundamental patterns of sending and receiving messages, building robust and observable actor systems requires understanding certain key concepts related to message lifecycle, traceability, and delivery guarantees.</p>
+<p>This section covers essential messaging concepts that provide support for debugging, monitoring, and ensuring the reliability of communication within and between actors.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="correlation-ids"><a class="header" href="#correlation-ids">Correlation IDs</a></h1>
+<p>In distributed systems and asynchronous messaging architectures, operations often span multiple messages, actors, or services. Tracking the flow of a single logical transaction or request through this series of interactions can be challenging. This is where <strong>Correlation IDs</strong> become invaluable.</p>
+<p>A <strong>Correlation ID</strong> is a unique identifier assigned to the <em>initial message</em> or event of a specific transaction or workflow. This same ID is then included in <em>all subsequent messages</em> or events that are part of that same logical flow.</p>
+<p>Correlation IDs are <strong>not typically used for general system-level messages</strong> (like supervision signals, acknowledgements handled by the framework, or broadcast system events) or for tracking the overall health of the messaging infrastructure itself. They are specifically for tracing the path and state of a <strong>specific business process or workflow</strong> that spans multiple actors or services.</p>
+<p>Think of it as monitoring an <em>individual product</em> as it moves through different stations on an assembly line (the workflow), rather than monitoring the health or overall throughput of the assembly line machinery itself. Some examples of where you <em>would</em> use Correlation IDs in a workflow include:</p>
+<ul>
+<li>Tracking an individual order as it moves from <code>Order Placed</code> -&gt; <code>Payment Processed</code> -&gt; <code>Inventory Reserved</code> -&gt; <code>Shipped</code>.</li>
+<li>Following a user's request through several microservices or actor interactions to fulfill that request.</li>
+<li>Monitoring the steps involved in processing a single incoming data record through a processing pipeline.</li>
+</ul>
+<p>By limiting Correlation IDs to business workflows, they provide highly relevant context for debugging and understanding the journey of individual requests, without cluttering system-level communication.</p>
+<h2 id="purpose-and-usage"><a class="header" href="#purpose-and-usage">Purpose and Usage</a></h2>
+<p>When Actor A sends a message that triggers a series of actions involving Actors B, C, and potentially others, Actor A generates a unique Correlation ID and includes it in the message sent to Actor B. When Actor B processes this message and sends a new message to Actor C, it copies the Correlation ID from the message it received and includes it in the message sent to C. This continues throughout the entire chain.</p>
+<h2 id="benefits-2"><a class="header" href="#benefits-2">Benefits</a></h2>
+<ol>
+<li><strong>Tracing and Debugging:</strong> By searching logs or message queues for a specific Correlation ID, developers and operators can easily follow the exact path a request took, identify which actors processed it, and pinpoint where failures or delays occurred. This is particularly crucial in complex systems with many interconnected components.</li>
+<li><strong>Request/Response Matching:</strong> In the Pub/Sub request/response pattern, the Correlation ID allows the requester to match the incoming response to the specific request it sent, especially if multiple requests might be outstanding simultaneously. The requester includes a Correlation ID in its initial request, and the responder includes the same ID in the response.</li>
+<li><strong>Auditing and Monitoring:</strong> Correlation IDs provide a mechanism to audit the execution path of specific transactions for compliance or performance analysis.</li>
+<li><strong>Context Propagation:</strong> Beyond just tracing, Correlation IDs can help propagate context across service boundaries without requiring components to understand the full state of the transaction.</li>
+</ol>
+<h2 id="implementation"><a class="header" href="#implementation">Implementation</a></h2>
+<p>Implementing Correlation IDs is fairly simple and typically involves:</p>
+<ul>
+<li>Generating a unique ID (e.g., a <code>UUID</code>) when a new transaction starts.</li>
+<li>Adding a dedicated field (e.g., <code>correlation_id</code>) to message structures.</li>
+<li>Ensuring that any actor or component processing a message and initiating subsequent messages <em>copies</em> the Correlation ID from the incoming message to the outgoing message.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="tell"><a class="header" href="#tell">Tell</a></h1>
+<p>In actor systems, the most fundamental message sending pattern is often referred to as <code>tell</code>, <code>send</code>, or <code>cast</code> (terminology varies between frameworks). This pattern is characterized by sending a message to a target actor's address or <code>ActorRef</code> <strong>without expecting an immediate response</strong>.</p>
+<p>Key characteristics of the <code>tell</code> pattern:</p>
+<ol>
+<li><strong>Asynchronous:</strong> The sender actor does not pause or block its execution after sending the message. It immediately returns to processing its next instruction or message.</li>
+<li><strong>Unidirectional:</strong> The message flows in one direction only, from sender to receiver. There is no built-in mechanism in the <code>tell</code> operation itself to receive a reply.</li>
+<li><strong>Fire-and-Forget:</strong> From the sender's perspective, it dispatches the message and moves on. It doesn't wait for confirmation of receipt or processing completion (though underlying transport might offer some level of delivery guarantee).</li>
+</ol>
+<h2 id="importance-for-event-driven-architectures"><a class="header" href="#importance-for-event-driven-architectures">Importance for Event-Driven Architectures</a></h2>
+<p>The <code>tell</code> pattern is the bedrock of highly concurrent, scalable, and event-driven architectures built on actors. It aligns perfectly with the core principles of reacting to events:</p>
+<ul>
+<li>
+<p><strong>Decoupling</strong></p>
+<p>Publishers of events (<code>tell</code> messages) do not need to know <em>who</em> or <em>how many</em> actors are listening (subscribing) or what they will do with the event. They simply announce that "this happened" by sending the message. This creates immense decoupling between event sources and event consumers.</p>
+</li>
+<li>
+<p><strong>Non-Blocking Operations</strong></p>
+<p>Because the sender doesn't wait for a reply, it can continue processing other tasks or handling incoming messages. This is crucial for maintaining     responsiveness and throughput, especially when dealing with high volumes of events.</p>
+</li>
+<li>
+<p><strong>Scalability</strong></p>
+<p>Since senders aren't blocked, they can handle a high rate of outgoing messages. Receivers (subscribers) process messages asynchronously from the sender, allowing the system to scale by adding more processing power to handle incoming message loads.</p>
+</li>
+<li>
+<p><strong>Resilience</strong></p>
+<p>The failure of a recipient actor (e.g., one subscriber to an event) does not directly impact the sender or other recipients. The sender has already "fired and forgotten." While the specific message to the failed actor might become a "dead letter" (depending on the framework), the overall event flow from the     publisher is not stalled.</p>
+</li>
+<li>
+<p><strong>Natural Fit for Events</strong></p>
+<p>Events inherently represent something that <em>has happened</em>. The nature of an event is that it is broadcast for anyone interested to react. <code>Tell</code> is the natural way to broadcast or publish such information without requiring explicit coordination or response from each potential listener.</p>
+</li>
+</ul>
+<p>Contrast this with synchronous patterns where a sender calls a function and waits for a return value, or an asynchronous request/response pattern where the sender actively awaits a specific reply message. While these patterns are necessary for certain interactions, relying on them for core event propagation would quickly lead to bottlenecks, tight coupling, and reduced scalability in an event-driven system.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ask-aka-request-response"><a class="header" href="#ask-aka-request-response">Ask (a.k.a. Request-Response)</a></h1>
+<p>The <code>ask</code> pattern is a way to achieve a request-response interaction between actors where the sending actor explicitly expects a reply. Unlike the basic <code>tell</code> where the sender fires and forgets, <code>ask</code> provides a mechanism for the sender to wait for a result corresponding to its specific request. This can be modeled as a <code>Future</code> and used with <code>async/await</code>.</p>
+<p>Using <code>ask</code> is much closer to sequential programming. Code within the actor executes line-by-line and waits for responses each time.</p>
+<h2 id="problems-with-ask"><a class="header" href="#problems-with-ask">Problems with Ask</a></h2>
+<p>While <code>ask</code> seems convenient, its use introduces significant complications that often violate core actor principles and lead to hard-to-debug issues. Almost all stem from the fact that the actor's processing flow is now waiting on an external event (the response arriving to complete the Future) rather than solely processing its incoming message queue.</p>
+<ol>
+<li>
+<p><strong>Occupies the Actor's Execution Context</strong></p>
+<p>Until the Future completes (or times out) and the response is received, the actor cannot process <em>other</em> messages that arrive in its mailbox.</p>
+</li>
+<li>
+<p><strong>Cannot Gracefully Shutdown</strong></p>
+<p>Because the actor is busy waiting on the <code>ask</code> Future, it may not be able to process a shutdown message received in its mailbox in a timely manner. It might be stuck waiting for a reply that never comes or waiting for a timeout.</p>
+</li>
+<li>
+<p><strong>Cannot Process Control Messages</strong></p>
+<p>Similar to shutdown, critical control messages (like state queries, configuration updates, or explicit stop/cancel requests relevant to the actor's current task) might be delayed or missed because the actor is occupied with waiting for the <code>ask</code> response.</p>
+</li>
+<li>
+<p><strong>Memory Leaks and Resource Exhaustion</strong></p>
+<p>If a response message is genuinely lost or the target actor fails without sending a reply, the <code>Future</code> returned by <code>ask</code> will never complete. Without explicitly setting a timeout on <em>every</em> <code>ask</code> call, the actor's logic waiting on that Future will effectively hang indefinitely, consuming memory and     preventing the actor from processing further messages. Managing timeouts reliably for every request adds complexity.</p>
+</li>
+<li>
+<p><strong>Message Loss</strong></p>
+<p>Actor mailboxes uses bounded queues in order to prevent resource exhaustion. If an actor is stuck waiting on a Future, then the mailbox will fill up and messages will start to get dropped.</p>
+</li>
+</ol>
+<p>For these reasons it's recommended that actor systems be designed around <code>tell</code> (fire and forget messaging) instead of <code>ask</code>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="kinds-of-messages"><a class="header" href="#kinds-of-messages">Kinds of Messages</a></h1>
+<p>In designing actor systems and distributed architectures, especially those leaning towards event-driven principles or <a href="https://www.martinfowler.com/bliki/CQRS.html">CQRS</a> (Command Query Responsibility Segregation), it's helpful to categorize the different types of messages flowing through the system based on their purpose. The primary distinctions are typically made between Commands, Events, and Queries.</p>
+<h2 id="commands-expressing-intent"><a class="header" href="#commands-expressing-intent">Commands (Expressing Intent)</a></h2>
+<p><strong>Commands</strong> represent a user's or system's <em>intent</em> to perform an action or change the state of the system. They are imperative requests. A Command is a request for the system to <em>do something</em>.</p>
+<ul>
+<li>
+<p><strong>Nature:</strong> Imperative, a request.</p>
+</li>
+<li>
+<p><strong>Direction:</strong> Usually directed at a specific actor or a well-defined endpoint responsible for handling that specific type of action (e.g., an aggregate actor in DDD).</p>
+</li>
+<li>
+<p><strong>Expectation:</strong> The sender expects the command to be <em>attempted</em> and potentially result in a state change and/or the emission of one or more events. The sender might expect an acknowledgment of receipt or a more detailed response indicating success/failure or the outcome of the action.</p>
+</li>
+<li>
+<p><strong>Naming Convention:</strong> Often named in the imperative mood (verb-noun), like <code>CreateUser</code>, <code>PlaceOrder</code>, <code>ProcessPayment</code>.</p>
+</li>
+<li>
+<p><strong>Examples:</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Command</th><th>Description</th></tr></thead><tbody>
+<tr><td>CreateUser</td><td>Request to create a new user</td></tr>
+<tr><td>DeleteAccount</td><td>Request to delete a user account</td></tr>
+<tr><td>UpdateProfile</td><td>Modify user profile information</td></tr>
+<tr><td>ProcessPayment</td><td>Initiate a payment transaction</td></tr>
+<tr><td>PlaceOrder</td><td>Submit an order for processing</td></tr>
+<tr><td>AssignTask</td><td>Assign a task to an actor</td></tr>
+<tr><td>SendEmail</td><td>Trigger an email to be sent</td></tr>
+<tr><td>ScheduleReminder</td><td>Schedule a reminder for future action</td></tr>
+<tr><td>ApproveRequest</td><td>Approve a pending request</td></tr>
+<tr><td>RetryJob</td><td>Retry a failed background job</td></tr>
+</tbody></table>
+</div></li>
+</ul>
+<h2 id="events-representing-facts"><a class="header" href="#events-representing-facts">Events (Representing Facts)</a></h2>
+<p><strong>Events</strong> represent something that <em>has already happened</em> in the system. They are declarative statements of fact about a state change. Events are the result of successfully processing a Command (or sometimes external occurrences).</p>
+<ul>
+<li>
+<p><strong>Nature:</strong> Declarative, a statement of fact.</p>
+</li>
+<li>
+<p><strong>Direction:</strong> Usually published to a Pub/Sub topic or message bus, to be consumed by any interested party. Events are often broadcast.</p>
+</li>
+<li>
+<p><strong>Expectation:</strong> Publishers of events typically use <code>tell</code> (fire-and-forget) and do not expect a direct response from consumers. Consumers react to the event asynchronously.</p>
+</li>
+<li>
+<p><strong>Naming Convention:</strong> Often named in the past tense (noun-verb), like <code>UserCreated</code>, <code>OrderPlaced</code>, <code>PaymentProcessed</code>.</p>
+</li>
+<li>
+<p><strong>Examples:</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Event</th><th>Description</th></tr></thead><tbody>
+<tr><td>UserCreated</td><td>A new user has been successfully created</td></tr>
+<tr><td>AccountDeleted</td><td>A user account has been removed</td></tr>
+<tr><td>ProfileUpdated</td><td>A user profile was updated</td></tr>
+<tr><td>PaymentProcessed</td><td>A payment was completed successfully</td></tr>
+<tr><td>OrderPlaced</td><td>An order was submitted</td></tr>
+<tr><td>TaskAssigned</td><td>A task was assigned to someone</td></tr>
+<tr><td>EmailSent</td><td>An email was successfully delivered</td></tr>
+<tr><td>ReminderTriggered</td><td>A reminder has fired</td></tr>
+<tr><td>RequestApproved</td><td>A request has been approved</td></tr>
+<tr><td>JobRetried</td><td>A job retry was initiated</td></tr>
+</tbody></table>
+</div></li>
+</ul>
+<p>Events are crucial for decoupling. An actor emitting an event doesn't need to know <em>who</em> is interested or what they will do. Other actors (subscribers) can react to events to update read models, trigger side effects, or initiate subsequent commands/workflows.</p>
+<h2 id="queries-requesting-information"><a class="header" href="#queries-requesting-information">Queries (Requesting Information)</a></h2>
+<p><strong>Queries</strong> are requests for information about the current state of the system. They are not intended to change the system's state.</p>
+<ul>
+<li>
+<p><strong>Nature:</strong> Interrogative, a request for data.</p>
+</li>
+<li>
+<p><strong>Direction:</strong> Directed at an actor or service responsible for providing the requested information (often read models optimized for querying).</p>
+</li>
+<li>
+<p><strong>Expectation:</strong> The sender explicitly expects a response containing the requested data.</p>
+</li>
+<li>
+<p><strong>Naming Convention:</strong> Often named to reflect the data being requested (e.g., <code>GetUserProfile</code>, <code>ListOrders</code>, <code>GetOrderStatus</code>).</p>
+</li>
+<li>
+<p><strong>Examples:</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Query</th><th>Description</th></tr></thead><tbody>
+<tr><td>GetUserProfile</td><td>Retrieve details for a specific user</td></tr>
+<tr><td>ListOrders</td><td>Get a list of orders for a user</td></tr>
+<tr><td>GetOrderStatus</td><td>Check the current status of an order</td></tr>
+<tr><td>FindProductsByCategory</td><td>Find products within a given category</td></tr>
+<tr><td>CountActiveUsers</td><td>Get the total number of active users</td></tr>
+</tbody></table>
+</div></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="persistance"><a class="header" href="#persistance">Persistance</a></h1>
+<p>Actor persistence allows actors to save their internal state and message processing history. This is crucial for ensuring reliability and fault tolerance, enabling an actor to recover its state after a system restart or crash. By persisting state and potentially incoming messages, the actor can pick up exactly where it left off, maintaining consistency and durability.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="journal"><a class="header" href="#journal">Journal</a></h1>
+<p>The <strong>Journal</strong> is a fundamental concept in actor systems designed for durability, fault tolerance, and recovery, especially those implementing event sourcing. It acts as a persistent, ordered log of the significant state changes or events that an actor has processed.</p>
+<h2 id="what-is-a-journal"><a class="header" href="#what-is-a-journal">What is a Journal?</a></h2>
+<p>At its core, a Journal is an immutable, append-only sequence of events or commands associated with a specific actor instance. Instead of saving the actor's current state directly, the actor logs the <em>facts</em> (events) or <em>decisions</em> (commands leading to events) that alter its state.</p>
+<h2 id="purpose-and-use-cases"><a class="header" href="#purpose-and-use-cases">Purpose and Use Cases</a></h2>
+<p>Journals are primarily used for:</p>
+<ul>
+<li><strong>Durability:</strong> Ensuring that an actor's history and the consequences of its actions are not lost if the actor or the entire system crashes.</li>
+<li><strong>Recovery:</strong> Allowing an actor to reliably rebuild its state by replaying the sequence of events from its journal after a failure or planned restart.</li>
+<li><strong>Consistency:</strong> Providing a single, authoritative source of truth for an actor's history, enabling deterministic state reconstruction.</li>
+<li><strong>Auditing:</strong> The journal provides a complete history of an actor's life and state changes, valuable for debugging, compliance, and analysis.</li>
+<li><strong>Event Sourcing:</strong> Journals are the cornerstone of event-sourced systems, where the application state is determined solely by applying a sequence of events.</li>
+</ul>
+<h2 id="the-immutable-event-log"><a class="header" href="#the-immutable-event-log">The Immutable Event Log</a></h2>
+<p>The central idea is that events are facts: they represent something that <em>has already happened</em>. Once an event is recorded in the journal, it is typically considered immutable and should never be changed or deleted (though some systems might allow compaction or snapshotting to manage size). The actor's current state is merely a projection or fold over this sequence of past events.</p>
+<h2 id="actor-specific-journals"><a class="header" href="#actor-specific-journals">Actor-Specific Journals</a></h2>
+<p>Journal implementations are inherently <strong>actor-specific</strong>, or more accurately, tied to the <em>type</em> or <em>behavior</em> of an actor rather than being a generic, one-size-fits-all log.</p>
+<ul>
+<li>The events stored in a <code>UserAccount</code> actor's journal (<code>AccountCreated</code>, <code>AddressChanged</code>, <code>PasswordReset</code>) are specific to the concept of a user account.</li>
+<li>The events stored in an <code>Order</code> actor's journal (<code>OrderPlaced</code>, <code>ItemAdded</code>, <code>PaymentProcessed</code>) are specific to an order.</li>
+</ul>
+<p>This actor-specific nature reinforces <strong>encapsulation</strong>. The interpretation and application of events in a <code>UserAccount</code> journal are the sole responsibility of the <code>UserAccount</code> actor logic. No other actor should directly read or try to interpret the raw events from another actor's journal; they should interact via messages (Commands or Queries) or react to published events from the actor they are interested in.</p>
+<h2 id="journals-vs-snapshots"><a class="header" href="#journals-vs-snapshots">Journals vs. Snapshots</a></h2>
+<p>While the journal logs incremental changes (events), rebuilding state by replaying every event from the beginning can become time-consuming for long-lived actors with large journals. To mitigate this, <strong>snapshots</strong> can be used.</p>
+<ul>
+<li>A <strong>Snapshot</strong> captures the actor's full internal state at a specific point in time (i.e., after applying a certain number of events).</li>
+<li>Think of the <strong>Journal</strong> as the transaction history (the list of all deposits and withdrawals) and a <strong>Snapshot</strong> as the account balance at a specific date.</li>
+</ul>
+<h2 id="the-recovery-process"><a class="header" href="#the-recovery-process">The Recovery Process</a></h2>
+<p>When an actor needs to recover its state (due to a crash, migration, or intentional restart):</p>
+<ol>
+<li><strong>Load Latest Snapshot (Optional):</strong> The recovery process first checks for the most recent snapshot for this actor instance. If found, it loads this snapshot, restoring the state to that point.</li>
+<li><strong>Replay Journaled Events:</strong> The process then reads the events from the journal that occurred <em>after</em> the snapshot was taken (or from the beginning if no snapshot was loaded).</li>
+<li><strong>Apply Events:</strong> Each of these events is applied sequentially to the loaded state. This brings the actor's state up-to-date.</li>
+<li><strong>Resume Processing:</strong> Once all relevant journal entries have been replayed, the actor is considered recovered and can resume processing new incoming messages from its mailbox.</li>
+</ol>
+<p>This deterministic replay ensures the actor's state is consistent and accurate based on its recorded history.</p>
+<h2 id="journal-implementations"><a class="header" href="#journal-implementations">Journal Implementations</a></h2>
+<p>The underlying storage for journals varies:</p>
+<ul>
+<li>Databases (SQL, NoSQL)</li>
+<li>File systems</li>
+<li>Specialized distributed log systems (like Apache Kafka, EventStoreDB)</li>
+</ul>
+<p>The choice depends on requirements for throughput, latency, consistency guarantees, scalability, and operational complexity. Actor frameworks often provide pluggable journal backends.</p>
+<h2 id="journal-sequence-numbers"><a class="header" href="#journal-sequence-numbers">Journal Sequence Numbers</a></h2>
+<p>A critical aspect of the Journal's functionality, especially for ensuring reliable recovery and consistency, is the use of <strong>Sequence Numbers</strong>.</p>
+<p>For each persistent actor instance, the events or commands written to its Journal are assigned a strictly <strong>increasing, contiguous sequence number</strong>. This number uniquely identifies the position of an entry within <em>that specific actor's</em> journal log. Typically, the sequence starts from 1 for the first entry written by a given actor instance.</p>
+<h3 id="how-sequence-numbers-are-used"><a class="header" href="#how-sequence-numbers-are-used">How Sequence Numbers are Used</a></h3>
+<ol>
+<li>
+<p><strong>Ordering and Determinism</strong></p>
+<p>Sequence numbers enforce the order in which events occurred. During recovery, the actor system reads entries from the journal in strict order of increasing sequence numbers. This guarantees that applying the same sequence of events in the same order will always result in the same final state, making recovery deterministic.</p>
+</li>
+<li>
+<p><strong>Tracking Progress</strong></p>
+<p>An actor knows how far along it is in processing its history by the sequence number of the last event it successfully processed and persisted. The highest sequence number for an actor's journal represents its most up-to-date persisted state change.</p>
+</li>
+<li>
+<p><strong>Coordination with Snapshots</strong></p>
+<p>Sequence numbers are the bridge between Journals and Snapshots. When a Snapshot of an actor's state is saved, it is always associated with the <strong>sequence number of the last journal entry that was applied to reach that state</strong>. This sequence number is stored alongside the snapshot.</p>
+</li>
+<li>
+<p><strong>Defining Recovery Range</strong></p>
+<p>During recovery with a snapshot, the system loads the snapshot and notes its associated sequence number (let's call it <code>S</code>). It then tells the Journal store to retrieve all events for this actor starting <em>from sequence number <code>S + 1</code></em>. This ensures that only the events that occurred <em>after</em> the snapshot was taken are replayed on top of the snapshot state, avoiding redundant processing and potential inconsistencies.</p>
+</li>
+<li>
+<p><strong>Detecting Gaps</strong></p>
+<p>While ideally the journal store ensures contiguous sequence numbers, the numbers provide a way for the system to potentially detect if entries are missing or out of order (though the storage backend should handle this reliability).</p>
+</li>
+</ol>
+<p>It's important to remember that these sequence numbers are <strong>local to a specific actor instance's journal</strong>. They do not represent a global ordering of events across the entire system or across different actors. Each persistent actor manages its own independent sequence of journal numbers.</p>
+<h2 id="design-principles"><a class="header" href="#design-principles">Design Principles</a></h2>
+<p>When designing actors that use journals:</p>
+<ul>
+<li><strong>Identify Core Events:</strong> Focus on the business-meaningful events that represent durable facts.</li>
+<li><strong>Events are Immutable:</strong> Design event structures to be facts in the past tense.</li>
+<li><strong>State is Computed:</strong> Ensure the actor's current state is a projection of its journaled events.</li>
+<li><strong>Actor-Specific:</strong> Keep journal event formats and interpretation private to the actor type.</li>
+<li><strong>Consider Snapshots:</strong> Plan for snapshotting if replay time becomes a concern.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="snapshots"><a class="header" href="#snapshots">Snapshots</a></h1>
+<p>While the Journal provides a complete, immutable history of an actor's state changes through its events, reconstructing the actor's current state requires replaying potentially thousands or millions of events from the beginning of time or from the last saved snapshot. For long-lived actors with extensive journals, this replay process can become prohibitively slow, delaying recovery and impacting availability.</p>
+<p><strong>Snapshots</strong> provide a shortcut. A Snapshot is a serialized representation of an actor's state at <em>a specific point in time</em>. It's a capture of the state after applying a sequence of events up to a certain journal sequence number.</p>
+<h2 id="snapshots-and-journals-together"><a class="header" href="#snapshots-and-journals-together">Snapshots and Journals Together</a></h2>
+<p>Snapshots are not a replacement for the Journal; they are a complementary mechanism.</p>
+<ul>
+<li>The <strong>Journal</strong> remains the single source of truth, holding the complete, ordered sequence of events. It tells the story of <em>how</em> the actor reached a state.</li>
+<li>A <strong>Snapshot</strong> is a saved version of the <em>result</em> of applying events up to a certain point. It's a pre-computed state from the story.</li>
+</ul>
+<p>When an actor recovers, instead of replaying <em>all</em> events from the beginning of its journal, it can load the most recent Snapshot and then only replay the events that occurred <em>after</em> that snapshot was taken.</p>
+<h2 id="the-recovery-process-with-snapshots"><a class="header" href="#the-recovery-process-with-snapshots">The Recovery Process with Snapshots</a></h2>
+<p>The recovery workflow when using Snapshots is:</p>
+<ol>
+<li><strong>Load Latest Snapshot:</strong> The actor system attempts to load the most recent Snapshot saved for this specific actor instance.</li>
+<li><strong>Load Journal from Snapshot Point:</strong> If a Snapshot is successfully loaded (including its associated journal sequence number), the system then reads events from the Journal starting <em>immediately after</em> that sequence number.</li>
+<li><strong>Apply Remaining Events:</strong> The actor applies only these subsequent journaled events to the state loaded from the Snapshot.</li>
+<li><strong>Resume Processing:</strong> Once the remaining events are applied, the actor is fully recovered and can handle new messages.</li>
+<li><strong>Without Snapshot:</strong> If no Snapshot is found (e.g., it's the first time recovering, or snapshots were lost), the actor recovers by replaying all events from the very beginning of its Journal.</li>
+</ol>
+<p>This process significantly reduces the number of events that need to be replayed, speeding up recovery time.</p>
+<h2 id="when-and-what-to-snapshot"><a class="header" href="#when-and-what-to-snapshot">When and What to Snapshot</a></h2>
+<ul>
+<li><strong>Frequency:</strong> Snapshots are typically saved periodically – for example, after every N events, after a certain period of time, or when the actor's state reaches a certain size or complexity. Too frequent snapshotting adds overhead (serialization, storage), while too infrequent snapshotting reduces the recovery speed benefit.</li>
+<li><strong>What State:</strong> The snapshot should capture the actor's <em>current state</em>. It should include all the mutable fields that define the actor's current condition. This state must be <strong>Serializable</strong> so it can be written to persistent storage.</li>
+<li><strong>Consistency:</strong> The snapshot must accurately reflect the state after processing events up to a specific, recorded journal sequence number. This sequence number is crucial for knowing where to start replaying events from the Journal.</li>
+</ul>
+<h2 id="considerations-1"><a class="header" href="#considerations-1">Considerations</a></h2>
+<ul>
+<li><strong>Storage:</strong> Snapshots require persistent storage (databases, file systems). This storage must be reliable and accessible during recovery.</li>
+<li><strong>Serialization Overhead:</strong> Creating a snapshot involves serializing the actor's entire state, which can be CPU-intensive and time-consuming, especially for large states.</li>
+<li><strong>Coupling:</strong> The snapshot format is tightly coupled to the actor's internal state structure. Changes to the actor's state model might require versioning or migration strategies for existing snapshots.</li>
+<li><strong>Snapshot vs. Journal Integrity:</strong> The Journal remains the ultimate source of truth. If a snapshot is corrupt or missing, the system can (albeit slower) recover solely from the Journal. The system should prioritize Journal integrity.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="actor-startup-and-ready-state"><a class="header" href="#actor-startup-and-ready-state">Actor Startup and Ready State</a></h1>
+<p>Note that larger actor frameworks will provide some form of a <code>persistence</code> module. This should provide all of the functionality needed to restore actors to their original state. However, if you do not have access to a persistent-capable framework, then this page details how recovery works.</p>
+<hr />
+<p>When an actor is created or restarted, it goes through an initialization phase before it is fully capable of processing regular messages from its mailbox. This phase is crucial for establishing the actor's initial state. For actors that use persistence, this startup phase involves state recovery.</p>
+<p>An actor can be thought of as transitioning through distinct <strong>internal states</strong>:</p>
+<ul>
+<li>
+<p><strong>Initializing / Recovering</strong></p>
+<p>The actor has been created but is actively loading its past state from a journal or other persistent store. It is not yet ready to handle its primary     operational messages.</p>
+</li>
+<li>
+<p><strong>Ready</strong></p>
+<p>The actor has successfully loaded its historical state and is now capable of processing all types of incoming messages according to its main business logic.</p>
+</li>
+</ul>
+<h2 id="the-startup-process-entering-the-initializing-state"><a class="header" href="#the-startup-process-entering-the-initializing-state">The Startup Process: Entering the Initializing State</a></h2>
+<p>When a persistent actor instance is spawned by the system, its <code>on_start</code> logic begins. At this point, the actor enters the <strong>Initializing</strong> state. The actor's first task is typically to initiate the recovery process.</p>
+<p>This involves:</p>
+<ol>
+<li>Starting out in an <code>Initializing</code> state.</li>
+<li>Sending a specific message to a known "Journal Reader" actor or service, requesting its historical data (events) based on its unique identity.</li>
+<li>Potentially sending a similar request to a "Snapshot Store" service if snapshots are used, asking for the latest snapshot.</li>
+</ol>
+<p>The actor now waits for these recovery messages to arrive in its mailbox.</p>
+<h2 id="handling-messages-during-recovery-stashing"><a class="header" href="#handling-messages-during-recovery-stashing">Handling Messages During Recovery: Stashing</a></h2>
+<p>Any message sent to the actor's <code>ActorRef</code> will be placed in its mailbox, but this needs to be handled carefully.</p>
+<p>Since the actor cannot correctly process regular operational messages until its state is recovered, its <code>handler</code> logic must check its current state. If the actor is <code>Initializing</code> and receives a message that is <em>not</em> part of the recovery process (i.e., not a response from the Journal Reader or Snapshot Store), it must <strong>stash</strong> the message.</p>
+<p>Stashing involves:</p>
+<ul>
+<li>Checking if the actor's current state is <code>Initializing</code>.</li>
+<li>If yes, storing the incoming message in a temporary internal collection, like a <code>VecDeque</code> (a double-ended queue), often called the "stash".</li>
+<li>Returning from the <code>handler</code> function without processing the message's content against the actor's business logic.</li>
+</ul>
+<p>Messages related to recovery (like <code>SnapshotLoaded(state, seq_num)</code> or <code>JournalEntry(event, seq_num)</code>) are <em>not</em> stashed; they are processed immediately by the <code>receive</code> function's <code>Initializing</code> state logic to rebuild the actor's state.</p>
+<h2 id="replaying-history-and-transitioning-to-ready"><a class="header" href="#replaying-history-and-transitioning-to-ready">Replaying History and Transitioning to Ready</a></h2>
+<p>As the actor receives recovery messages from the Journal Reader/Snapshot Store:</p>
+<ol>
+<li>It applies the loaded snapshot state (if any).</li>
+<li>It applies each journaled event in sequence number order, mutating its internal state just as it would for a new incoming command/event.</li>
+</ol>
+<p>Once the actor has received and applied all historical data (e.g., indicated by a final message from the Journal Reader like <code>RecoveryComplete(last_seq_num)</code>), it knows its state is fully reconstructed. At this moment, the actor performs a critical state transition:</p>
+<ul>
+<li>It changes its state from <code>Initializing</code> to <code>Ready</code>.</li>
+</ul>
+<h2 id="processing-stashed-messages-and-new-messages"><a class="header" href="#processing-stashed-messages-and-new-messages">Processing Stashed Messages and New Messages</a></h2>
+<p>Upon transitioning to the <code>Ready</code> state, the actor's priority changes:</p>
+<ol>
+<li>It first processes all messages currently held in its internal "stash". It iterates through the stash and passes each stashed message back to its <code>receive</code> function, this time processing it using the <code>Ready</code> state logic. This ensures messages received during recovery are handled in the order they arrived (relative to each other).</li>
+<li>After the stash is empty, the actor proceeds to process any new messages that subsequently arrive in its mailbox, using its <code>Ready</code> state logic.</li>
+</ol>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="design-patterns"><a class="header" href="#design-patterns">Design Patterns</a></h1>
+<p>This section explores various actor design patterns.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="resilience"><a class="header" href="#resilience">Resilience</a></h1>
+<p>Patterns that help actors stay healthy under failure, load, or instability.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="circuit-breaker"><a class="header" href="#circuit-breaker">Circuit Breaker</a></h1>
+<p>The Circuit Breaker pattern is a design approach used to prevent a system from repeatedly trying to execute an operation that is likely to fail. It wraps a protected function call (like a call to a remote service or another component) in a circuit breaker object, which monitors failures.</p>
+<p>In the context of actor systems, this pattern can be applied to an actor that needs to send messages to another actor or external service which might be unreliable. Instead of the calling actor directly sending messages and potentially blocking or consuming resources on repeated failures, a "circuit breaker" logic is incorporated, often within the sending actor itself or a dedicated intermediary actor.</p>
+<p>The circuit breaker typically operates in three states:</p>
+<ol>
+<li>
+<p><strong>Closed</strong></p>
+<p>The default state. Messages are sent to the target actor/service. The breaker monitors for failures (e.g., timeouts, error responses). If the failure rate or count exceeds a threshold within a certain time window, the breaker trips and transitions to the Open state.</p>
+</li>
+<li>
+<p><strong>Open</strong></p>
+<p>The breaker immediately fails messages without attempting to send them to the target. It might return an error or a fallback result. This prevents     overwhelming the failing target and saves resources. After a configured timeout period, the breaker transitions to the Half-Open state.</p>
+</li>
+<li>
+<p><strong>Half-Open</strong></p>
+<p>A limited number of trial messages are allowed through to the target. If these trial messages succeed, the breaker assumes the target has recovered and transitions back to the Closed state. If any of these trial messages fail, the breaker assumes the target is still unhealthy and immediately transitions     back to the Open state, typically resetting or increasing the timeout period.</p>
+</li>
+</ol>
+<p>Implementing a circuit breaker involves adding state management within an actor's message processing logic. An actor might hold variables for the current state (Closed, Open, Half-Open), a failure counter, a success counter (for Half-Open state), and a timestamp for state transitions. When processing an outgoing message, the actor checks its circuit breaker state before attempting delivery. Incoming error or success messages from the target update the state. Timers can be managed through scheduled messages within the actor system itself.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="isolation-and-resource-protection"><a class="header" href="#isolation-and-resource-protection">Isolation and Resource Protection</a></h1>
+<p>Patterns that ensure faults and heavy usage don’t spread across components.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="message-routing-and-delivery"><a class="header" href="#message-routing-and-delivery">Message Routing and Delivery</a></h1>
+<p>Patterns that govern how messages are sent, rerouted, or managed between actors.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="state-and-lifecycle-management"><a class="header" href="#state-and-lifecycle-management">State and Lifecycle Management</a></h1>
+<p>Patterns for managing actor state, evolution, and lifecycle events.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="coordination-and-workflow"><a class="header" href="#coordination-and-workflow">Coordination and Workflow</a></h1>
+<p>Patterns for orchestrating multiple actors to perform long-lived or structured tasks.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="distribution-and-scalability"><a class="header" href="#distribution-and-scalability">Distribution and Scalability</a></h1>
+<p>Patterns for spreading actors across nodes or machines while maintaining consistency or performance.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="monitoring-and-observability"><a class="header" href="#monitoring-and-observability">Monitoring and Observability</a></h1>
+<p>Patterns to instrument, measure, and gain visibility into actor behavior.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="mermaid.min.js"></script>
+        <script src="mermaid-init.js"></script>
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+    </div>
+    </body>
+</html>

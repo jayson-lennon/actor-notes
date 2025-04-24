@@ -1,0 +1,292 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Journal - Programming with Actors</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Programming with Actors</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="journal"><a class="header" href="#journal">Journal</a></h1>
+<p>The <strong>Journal</strong> is a fundamental concept in actor systems designed for durability, fault tolerance, and recovery, especially those implementing event sourcing. It acts as a persistent, ordered log of the significant state changes or events that an actor has processed.</p>
+<h2 id="what-is-a-journal"><a class="header" href="#what-is-a-journal">What is a Journal?</a></h2>
+<p>At its core, a Journal is an immutable, append-only sequence of events or commands associated with a specific actor instance. Instead of saving the actor's current state directly, the actor logs the <em>facts</em> (events) or <em>decisions</em> (commands leading to events) that alter its state.</p>
+<h2 id="purpose-and-use-cases"><a class="header" href="#purpose-and-use-cases">Purpose and Use Cases</a></h2>
+<p>Journals are primarily used for:</p>
+<ul>
+<li><strong>Durability:</strong> Ensuring that an actor's history and the consequences of its actions are not lost if the actor or the entire system crashes.</li>
+<li><strong>Recovery:</strong> Allowing an actor to reliably rebuild its state by replaying the sequence of events from its journal after a failure or planned restart.</li>
+<li><strong>Consistency:</strong> Providing a single, authoritative source of truth for an actor's history, enabling deterministic state reconstruction.</li>
+<li><strong>Auditing:</strong> The journal provides a complete history of an actor's life and state changes, valuable for debugging, compliance, and analysis.</li>
+<li><strong>Event Sourcing:</strong> Journals are the cornerstone of event-sourced systems, where the application state is determined solely by applying a sequence of events.</li>
+</ul>
+<h2 id="the-immutable-event-log"><a class="header" href="#the-immutable-event-log">The Immutable Event Log</a></h2>
+<p>The central idea is that events are facts: they represent something that <em>has already happened</em>. Once an event is recorded in the journal, it is typically considered immutable and should never be changed or deleted (though some systems might allow compaction or snapshotting to manage size). The actor's current state is merely a projection or fold over this sequence of past events.</p>
+<h2 id="actor-specific-journals"><a class="header" href="#actor-specific-journals">Actor-Specific Journals</a></h2>
+<p>Journal implementations are inherently <strong>actor-specific</strong>, or more accurately, tied to the <em>type</em> or <em>behavior</em> of an actor rather than being a generic, one-size-fits-all log.</p>
+<ul>
+<li>The events stored in a <code>UserAccount</code> actor's journal (<code>AccountCreated</code>, <code>AddressChanged</code>, <code>PasswordReset</code>) are specific to the concept of a user account.</li>
+<li>The events stored in an <code>Order</code> actor's journal (<code>OrderPlaced</code>, <code>ItemAdded</code>, <code>PaymentProcessed</code>) are specific to an order.</li>
+</ul>
+<p>This actor-specific nature reinforces <strong>encapsulation</strong>. The interpretation and application of events in a <code>UserAccount</code> journal are the sole responsibility of the <code>UserAccount</code> actor logic. No other actor should directly read or try to interpret the raw events from another actor's journal; they should interact via messages (Commands or Queries) or react to published events from the actor they are interested in.</p>
+<h2 id="journals-vs-snapshots"><a class="header" href="#journals-vs-snapshots">Journals vs. Snapshots</a></h2>
+<p>While the journal logs incremental changes (events), rebuilding state by replaying every event from the beginning can become time-consuming for long-lived actors with large journals. To mitigate this, <strong>snapshots</strong> can be used.</p>
+<ul>
+<li>A <strong>Snapshot</strong> captures the actor's full internal state at a specific point in time (i.e., after applying a certain number of events).</li>
+<li>Think of the <strong>Journal</strong> as the transaction history (the list of all deposits and withdrawals) and a <strong>Snapshot</strong> as the account balance at a specific date.</li>
+</ul>
+<h2 id="the-recovery-process"><a class="header" href="#the-recovery-process">The Recovery Process</a></h2>
+<p>When an actor needs to recover its state (due to a crash, migration, or intentional restart):</p>
+<ol>
+<li><strong>Load Latest Snapshot (Optional):</strong> The recovery process first checks for the most recent snapshot for this actor instance. If found, it loads this snapshot, restoring the state to that point.</li>
+<li><strong>Replay Journaled Events:</strong> The process then reads the events from the journal that occurred <em>after</em> the snapshot was taken (or from the beginning if no snapshot was loaded).</li>
+<li><strong>Apply Events:</strong> Each of these events is applied sequentially to the loaded state. This brings the actor's state up-to-date.</li>
+<li><strong>Resume Processing:</strong> Once all relevant journal entries have been replayed, the actor is considered recovered and can resume processing new incoming messages from its mailbox.</li>
+</ol>
+<p>This deterministic replay ensures the actor's state is consistent and accurate based on its recorded history.</p>
+<h2 id="journal-implementations"><a class="header" href="#journal-implementations">Journal Implementations</a></h2>
+<p>The underlying storage for journals varies:</p>
+<ul>
+<li>Databases (SQL, NoSQL)</li>
+<li>File systems</li>
+<li>Specialized distributed log systems (like Apache Kafka, EventStoreDB)</li>
+</ul>
+<p>The choice depends on requirements for throughput, latency, consistency guarantees, scalability, and operational complexity. Actor frameworks often provide pluggable journal backends.</p>
+<h2 id="journal-sequence-numbers"><a class="header" href="#journal-sequence-numbers">Journal Sequence Numbers</a></h2>
+<p>A critical aspect of the Journal's functionality, especially for ensuring reliable recovery and consistency, is the use of <strong>Sequence Numbers</strong>.</p>
+<p>For each persistent actor instance, the events or commands written to its Journal are assigned a strictly <strong>increasing, contiguous sequence number</strong>. This number uniquely identifies the position of an entry within <em>that specific actor's</em> journal log. Typically, the sequence starts from 1 for the first entry written by a given actor instance.</p>
+<h3 id="how-sequence-numbers-are-used"><a class="header" href="#how-sequence-numbers-are-used">How Sequence Numbers are Used</a></h3>
+<ol>
+<li>
+<p><strong>Ordering and Determinism</strong></p>
+<p>Sequence numbers enforce the order in which events occurred. During recovery, the actor system reads entries from the journal in strict order of increasing sequence numbers. This guarantees that applying the same sequence of events in the same order will always result in the same final state, making recovery deterministic.</p>
+</li>
+<li>
+<p><strong>Tracking Progress</strong></p>
+<p>An actor knows how far along it is in processing its history by the sequence number of the last event it successfully processed and persisted. The highest sequence number for an actor's journal represents its most up-to-date persisted state change.</p>
+</li>
+<li>
+<p><strong>Coordination with Snapshots</strong></p>
+<p>Sequence numbers are the bridge between Journals and Snapshots. When a Snapshot of an actor's state is saved, it is always associated with the <strong>sequence number of the last journal entry that was applied to reach that state</strong>. This sequence number is stored alongside the snapshot.</p>
+</li>
+<li>
+<p><strong>Defining Recovery Range</strong></p>
+<p>During recovery with a snapshot, the system loads the snapshot and notes its associated sequence number (let's call it <code>S</code>). It then tells the Journal store to retrieve all events for this actor starting <em>from sequence number <code>S + 1</code></em>. This ensures that only the events that occurred <em>after</em> the snapshot was taken are replayed on top of the snapshot state, avoiding redundant processing and potential inconsistencies.</p>
+</li>
+<li>
+<p><strong>Detecting Gaps</strong></p>
+<p>While ideally the journal store ensures contiguous sequence numbers, the numbers provide a way for the system to potentially detect if entries are missing or out of order (though the storage backend should handle this reliability).</p>
+</li>
+</ol>
+<p>It's important to remember that these sequence numbers are <strong>local to a specific actor instance's journal</strong>. They do not represent a global ordering of events across the entire system or across different actors. Each persistent actor manages its own independent sequence of journal numbers.</p>
+<h2 id="design-principles"><a class="header" href="#design-principles">Design Principles</a></h2>
+<p>When designing actors that use journals:</p>
+<ul>
+<li><strong>Identify Core Events:</strong> Focus on the business-meaningful events that represent durable facts.</li>
+<li><strong>Events are Immutable:</strong> Design event structures to be facts in the past tense.</li>
+<li><strong>State is Computed:</strong> Ensure the actor's current state is a projection of its journaled events.</li>
+<li><strong>Actor-Specific:</strong> Keep journal event formats and interpretation private to the actor type.</li>
+<li><strong>Consider Snapshots:</strong> Plan for snapshotting if replay time becomes a concern.</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../persistance.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../persistence/snapshots.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../persistance.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../persistence/snapshots.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../mermaid.min.js"></script>
+        <script src="../mermaid-init.js"></script>
+
+
+    </div>
+    </body>
+</html>

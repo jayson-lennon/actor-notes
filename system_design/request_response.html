@@ -1,0 +1,367 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Request-Response - Programming with Actors</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Programming with Actors</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="request-response"><a class="header" href="#request-response">Request-Response</a></h1>
+<h2 id="direct-to-target"><a class="header" href="#direct-to-target">Direct-to-target</a></h2>
+<p>Here are the steps for implementing a direct-to-target request/response pattern using a Pub/Sub message broker. This involves creating unique custom subscriptions per actor so that the responder knows where to publish their response.</p>
+<ol>
+<li>
+<p><strong>Responding Actor Subscribes</strong></p>
+<p>The actor designed to respond (the "responder") subscribes to the Pub/Sub broker for a specific query topic, e.g., <code>topic/query/my_thing</code>. This tells the broker to forward all messages published to this topic to the responder actor.</p>
+</li>
+<li>
+<p><strong>Requesting Actor Prepares and Subscribes</strong></p>
+<p>The actor initiating the request (the "requester") generates a unique reply topic (e.g., based on its own ID and the request ID) and then subscribes to this unique topic with the broker. This ensures the requester will receive messages specifically addressed back to it.</p>
+</li>
+<li>
+<p><strong>Requesting Actor Publishes Request</strong></p>
+<p>The requester actor publishes the request message to the responder's query topic (<code>topic/query/my_thing</code>). The message payload includes the necessary query data and the unique reply topic generated in step 2 (often in a field like <code>reply_to</code>).</p>
+</li>
+<li>
+<p><strong>Broker Routes Request</strong></p>
+<p>The Pub/Sub broker receives the message published to <code>topic/query/my_thing</code>. Based on the subscription from step 1, the broker routes this message to the responding actor.</p>
+</li>
+<li>
+<p><strong>Responding Actor Processes and Publishes Response</strong></p>
+<p>The responder actor receives the request message, processes it, generates a response, and extracts the <code>reply_to</code> topic from the incoming message. It then publishes the response message to this extracted <code>reply_to</code> topic. The responder does not need to know the identity or <code>ActorRef</code> of the requester.</p>
+</li>
+<li>
+<p><strong>Broker Routes Response</strong></p>
+<p>The Pub/Sub broker receives the message published to the unique <code>reply_to</code> topic. Based on the subscription from step 2, the broker routes this response message to the requesting actor.</p>
+</li>
+<li>
+<p><strong>Requesting Actor Receives Response</strong></p>
+<p>The requester actor receives the response message on its unique reply topic.</p>
+</li>
+</ol>
+<p>This pattern effectively decouples the requesting and responding actors, as they only need to know about the Pub/Sub broker and agreed-upon topics, not each other's specific addresses.</p>
+<pre class="mermaid">sequenceDiagram
+    participant Requester as Requesting Actor
+    participant Broker as Pub/Sub Broker
+    participant Responder as Responding Actor
+
+    Note over Requester,Responder: Setup Phase
+    Responder-&gt;&gt;Broker: Subscribe(&quot;topic/query/my_thing&quot;) (when actor spawns)
+    Requester-&gt;&gt;Broker: Subscribe(&quot;unique/reply/topic&quot;)
+
+    Note over Requester,Responder: Request/Response Phase
+    activate Requester
+    Requester-&gt;&gt;Broker: Publish(&quot;topic/query/my_thing&quot;, reply_to=&quot;unique/reply/topic&quot;)
+    activate Broker
+    Broker--&gt;&gt;Responder: Message(&quot;topic/query/my_thing&quot;, reply_to=&quot;unique/reply/topic&quot;)
+    deactivate Broker
+
+    activate Responder
+    Responder-&gt;&gt;Broker: Publish(&quot;unique/reply/topic&quot;, response_data)
+    deactivate Responder
+    activate Broker
+    Broker--&gt;&gt;Requester: Message(&quot;unique/reply/topic&quot;, response_data)
+    deactivate Broker
+    deactivate Requester
+</pre>
+<h2 id="gateway-correlation-id-mapping"><a class="header" href="#gateway-correlation-id-mapping">Gateway Correlation ID Mapping</a></h2>
+<p>The direct request/response pattern using unique, per-request <code>reply_to</code> topics requires each requesting actor to manage its own temporary subscription. This can become cumbersome, especially if the requesting actors are short-lived or if there are a very large number of concurrent requests. An alternative approach leverages a central <strong>Gateway Actor</strong> to manage the response routing using Correlation IDs.</p>
+<p>In this pattern:</p>
+<ol>
+<li>
+<p><strong>Gateway Subscription</strong></p>
+<p>A dedicated <strong>Gateway Actor</strong> maintains a single, long-lived subscription to a fixed <code>reply_to</code> topic (e.g., <code>gateway/replies</code>). This is the <em>only</em> topic     responses are sent to via the broker.</p>
+</li>
+<li>
+<p><strong>Responder Subscription</strong></p>
+<p>Responding actors subscribe to their specific query topics with the broker, same as before (e.g., <code>topic/query/my_thing</code>).</p>
+</li>
+<li>
+<p><strong>Request from Internal Actor</strong></p>
+<p>A requesting actor (behind the Gateway) sends a request message <em>directly</em> to the Gateway Actor, including the intended query topic and payload.</p>
+</li>
+<li>
+<p><strong>Gateway Action - Publish with Correlation ID</strong></p>
+<p>The Gateway Actor receives the internal request. It generates a unique <strong>Correlation ID</strong> (or reads the one the actor generated) for this request and stores a mapping internally, linking this Correlation ID to the specific requesting actor's <code>ActorRef</code>. The Gateway then publishes the request message to the broker using the intended query topic (<code>topic/query/my_thing</code>). The crucial difference is that the <code>reply_to</code> field in the published message is set to the     <em>Gateway's</em> own fixed reply topic (<code>gateway/replies</code>), and the message payload includes the generated Correlation ID.</p>
+<ul>
+<li><em>Gateway Map:</em> <code>CorrelationID -&gt; RequestingActorRef</code></li>
+<li><em>Published Message:</em> Publish to <code>topic/query/my_thing</code> with payload including query data and <code>correlation_id</code>, <code>reply_to: gateway/replies</code>.</li>
+</ul>
+</li>
+<li>
+<p><strong>Broker Routes Request</strong></p>
+<p>The Pub/Sub broker routes the request message to the subscribing responding actor(s) based on the query topic.</p>
+</li>
+<li>
+<p><strong>Responding Actor Action - Publish Response</strong></p>
+<p>The responding actor receives the request. It processes it and prepares a response. It takes the <code>correlation_id</code> from the incoming message and includes it in the response payload. It then publishes the response message to the topic specified in the <code>reply_to</code> field of the incoming message, which is the     Gateway's fixed reply topic (<code>gateway/replies</code>).</p>
+</li>
+</ol>
+<ul>
+<li><em>Published Message:</em> Publish to <code>gateway/replies</code> with payload including response data and the <em>same</em> <code>correlation_id</code>.</li>
+</ul>
+<ol start="7">
+<li>
+<p><strong>Broker Routes Response</strong></p>
+<p>The Pub/Sub broker routes the response message to the Gateway Actor because the Gateway is subscribed to <code>gateway/replies</code>.</p>
+</li>
+<li>
+<p><strong>Gateway Action - Route to Requester</strong></p>
+<p>The Gateway Actor receives the response message. It extracts the <code>correlation_id</code> from the payload. Using its internal mapping, it looks up the <code>ActorRef</code> of the original requesting actor associated with that Correlation ID. It then sends the response message directly to the requesting actor's <code>ActorRef</code>. After routing, the Gateway may remove the mapping entry for this Correlation ID (depending on whether duplicate responses are possible).</p>
+<ul>
+<li><em>Action:</em> Receive message on <code>gateway/replies</code>. Extract <code>correlation_id</code>. Look up <code>RequestingActorRef</code> in internal map. Send response message directly to <code>RequestingActorRef</code>.</li>
+</ul>
+</li>
+</ol>
+<pre class="mermaid">sequenceDiagram
+    participant ReqInternal as Requesting Actor (Internal)
+    participant Gateway as Gateway Actor
+    participant Broker as Pub/Sub Broker
+    participant Responder as Responding Actor (External)
+
+    Note over ReqInternal,Responder: Setup Phase
+    Gateway-&gt;&gt;Broker: Subscribe(&quot;gateway/replies&quot;)
+    Responder-&gt;&gt;Broker: Subscribe(&quot;topic/query/my_thing&quot;)
+
+    Note over ReqInternal,Responder: Request/Response Phase
+    activate ReqInternal
+    ReqInternal-&gt;&gt;Gateway: Request(query_data)
+    deactivate ReqInternal
+
+    activate Gateway
+    Gateway-&gt;&gt;Gateway: Generate/Store Mapping (CorrID -&gt; ReqInternal)
+    Gateway-&gt;&gt;Broker: Publish(&quot;topic/query/my_thing&quot;, correlation_id, reply_to=&quot;gateway/replies&quot;)
+    deactivate Gateway
+
+    activate Broker
+    Broker--&gt;&gt;Responder: Message(&quot;topic/query/my_thing&quot;, correlation_id, reply_to=&quot;gateway/replies&quot;)
+    deactivate Broker
+
+    activate Responder
+    Responder-&gt;&gt;Broker: Publish(&quot;gateway/replies&quot;, correlation_id, response_data)
+    deactivate Responder
+
+    activate Broker
+    Broker--&gt;&gt;Gateway: Message(&quot;gateway/replies&quot;, correlation_id, response_data)
+    deactivate Broker
+
+    activate Gateway
+    Gateway-&gt;&gt;Gateway: Lookup Mapping (CorrID -&gt; ReqInternal)
+    Gateway-&gt;&gt;ReqInternal: Response(response_data)
+    deactivate Gateway
+</pre>
+<h3 id="benefits"><a class="header" href="#benefits">Benefits</a></h3>
+<ul>
+<li><strong>Simplifies Requesting Actors:</strong> Requesting actors no longer need to manage individual subscriptions or unique reply topics. They simply send their request to the well-known Gateway.</li>
+<li><strong>Better for Short-Lived Actors:</strong> This pattern is ideal when requesting actors are transient, as the long-lived Gateway handles the durable subscription needed to receive the response.</li>
+<li><strong>Centralized Management:</strong> The complexity of correlating requests and responses is centralized in the Gateway.</li>
+</ul>
+<h3 id="considerations"><a class="header" href="#considerations">Considerations</a></h3>
+<ul>
+<li><strong>State Management in Gateway:</strong> The Gateway must reliably store and manage the Correlation ID to <code>ActorRef</code> mapping. This requires careful consideration of potential Gateway restarts, memory usage for long-running transactions, and handling potential timeouts or orphaned mappings if a requesting actor dies before receiving a response.</li>
+<li><strong>Single Point of Failure:</strong> If the Gateway actor fails, all in-flight requests awaiting responses will be lost unless the Gateway's state is persisted and recoverable.</li>
+</ul>
+<p>This pattern is particularly useful when you have a boundary (like a Bounded Context boundary managed by the Gateway/Router actor) and many internal actors that need to initiate requests to external services or actors via a Pub/Sub bus without exposing their individual presence or managing complex per-request subscriptions.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../system_design/hybrid_communication.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../messaging_concepts.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../system_design/hybrid_communication.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../messaging_concepts.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../mermaid.min.js"></script>
+        <script src="../mermaid-init.js"></script>
+
+
+    </div>
+    </body>
+</html>
